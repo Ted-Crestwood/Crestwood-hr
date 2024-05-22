@@ -19,7 +19,7 @@ const createApplication = async (req, res) => {
         const coverLetter = user.coverLetter.pdf;
         const name = user.user
         await main(coverLetter).catch(console.error)
-        res.status(200).json({message: `${name} created successfully`})
+        res.status(200).json({message: `User created successfully`})
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

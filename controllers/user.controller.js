@@ -54,7 +54,7 @@ const signInUser = async (req, res) => {
             return res.status(401).json({ message: "Invalid email or password" });
         }
         // Authentication successful
-        res.status(200).json({ message: "Sign in successfully", user });
+        res.status(200).json({ message: "Sign in successfully" });
     } catch (error) {
         // Internal server error
         res.status(500).json({ message: error.message });
