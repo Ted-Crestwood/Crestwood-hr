@@ -17,14 +17,15 @@ const createApplication = async (req, res) => {
         const application = await Application.create(req.body);
         const user = application.person[0];
         const coverLetter = user.coverLetter.pdf;
+        const name = user.user
         await main(coverLetter).catch(console.error)
-        console.log("application:", application)
-        res.status(200).json(application);
+        res.status(200).json({message: `${name} created successfully`})
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 }
 module.exports = { createApplication, getApplications };
+// console.log("application:", application)
 
 // const user = application.person[0];
 // const academicPdf = user.academic;
