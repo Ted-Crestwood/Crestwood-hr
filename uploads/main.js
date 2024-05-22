@@ -21,7 +21,7 @@ async function main(data) {
   await s3Client.send(
     new PutObjectCommand({
       Bucket: bucketName,
-      Key: "my-main-object.txt",
+      Key: "new.pdf",
       Body: data,
     })
   );
