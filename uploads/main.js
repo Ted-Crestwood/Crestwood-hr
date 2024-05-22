@@ -10,7 +10,7 @@ async function main(data) {
       secretAccessKey: process.env.AWS_SECRET_KEY,
     }
   });
-  const bucketName = `wed-bucket-${Date.now()}`;
+  const bucketName = `cover-letter-${Date.now()}`;
   await s3Client.send(
     new CreateBucketCommand({
       Bucket: bucketName,
