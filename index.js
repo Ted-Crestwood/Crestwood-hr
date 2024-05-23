@@ -4,6 +4,7 @@ const cors = require('cors')
 const applicationRoute = require('./routes/application.route');
 const userRoute = require('./routes/user.route')
 const uploadCoverLetter = require('./routes/upload.route')
+const getApplicationsById = require('./routes/application.route')
 const dotenv = require('dotenv');
 const { main } = require('./uploads/main');
 dotenv.config();
@@ -20,8 +21,9 @@ app.use(express.urlencoded({extended:false}));
 app.use('/', userRoute);
 app.use('/signin', userRoute);
 app.use('/signup', userRoute)
-app.use('/apply', applicationRoute )
-app.use('/applications', applicationRoute)
+app.use('/applications', applicationRoute )
+app.use('/applications/:id',getApplicationsById)
+app.use('/apply', applicationRoute)
 app.use('/upload/letter', uploadCoverLetter)
 
 

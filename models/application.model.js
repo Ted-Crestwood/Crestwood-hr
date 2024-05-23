@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const ApplicationSchema = new mongoose.Schema({
-  person: [{
+  person: {
     firstName: {
       type: String,
       required: true,
@@ -188,7 +188,7 @@ const ApplicationSchema = new mongoose.Schema({
         contentType: String
       }
     }
-  }],
+  },
 }, {
   timestamps: true,
 });
