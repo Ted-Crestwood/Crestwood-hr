@@ -8,6 +8,9 @@ const uploadCoverLetter = require('./routes/upload.route')
 const getApplicationsById = require('./routes/application.route')
 const dotenv = require('dotenv');
 const { main } = require('./uploads/main');
+const  createOrganisation  = require('./routes/organisation.route');
+const  getAllOrganisation  = require('./routes/organisation.route');
+const getOrganisationById  = require('./routes/organisation.route');
 dotenv.config();
 
 const app = express();
@@ -27,9 +30,9 @@ app.use('/applications', applicationRoute )
 app.use('/applications/:id',getApplicationsById)
 app.use('/apply', applicationRoute)
 app.use('/upload/letter', uploadCoverLetter)
-
-
-
+app.use('/create/organisations' ,createOrganisation)
+app.use('/get/organisations', getAllOrganisation)
+app.use('/get/organisations/:id', getOrganisationById)
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
