@@ -11,6 +11,8 @@ const { main } = require('./uploads/main');
 const  createOrganisation  = require('./routes/organisation.route');
 const  getAllOrganisation  = require('./routes/organisation.route');
 const getOrganisationById  = require('./routes/organisation.route');
+const  createJob  = require('./routes/job.route');
+const getJobs  = require('./routes/job.route');
 dotenv.config();
 
 const app = express();
@@ -33,6 +35,8 @@ app.use('/upload/letter', uploadCoverLetter)
 app.use('/create/organisations' ,createOrganisation)
 app.use('/get/organisations', getAllOrganisation)
 app.use('/get/organisations/:id', getOrganisationById)
+app.use('/create/job', createJob)
+app.use('/jobs', getJobs)
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
