@@ -3,13 +3,14 @@ const bcrypt = require('bcrypt');
 
 const createUser = async (req, res) => {
     try {
-       const {email,password,name} = req.body;
+       const {email,password,name,isAdmin} = req.body;
        const existingEmail = await User.findOne({email});
        if(existingEmail){
         return res.status(400).json({message:"Email already exists"})
        }
        const hashPassword = await bcrypt.hash(password,10);
        const newUser = await User.create({
+        isAdmin,
         name,
         email,
         password: hashPassword
@@ -19,28 +20,6 @@ const createUser = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
-const getUser = async (req, res) => {
-    try {
-        const user = await User.find({})
-        res.status(200).json(user)
-    } catch (error) {
-        res.status(500).json({ message: error.message })
-    }
-}
-const getUserById = async (req, res) => {
-    try {
-        const userId = req.params.id; 
-        const user = await User.findById(userId); 
-
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
-        }
-
-        res.status(200).json({ message: `${user} found` });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
 
 const signInUser = async (req, res) => {
     try {
@@ -53,12 +32,35 @@ const signInUser = async (req, res) => {
         if (!isPasswordValid) {
             return res.status(401).json({ message: "Invalid email or password" });
         }
-        // Authentication successful
         res.status(200).json({ message: "Sign in successfully" });
     } catch (error) {
-        // Internal server error
         res.status(500).json({ message: error.message });
     }
 };
+
+const getUser = async (req, res) => {
+    try {
+        const user = await User.find({})
+        res.status(200).json(user)
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+const getUserById = async (req, res) => {
+    try {
+        const {id} = req.params; 
+        const user = await User.findById(id); 
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
 
 module.exports = {createUser,getUser,signInUser,getUserById};

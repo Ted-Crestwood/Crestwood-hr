@@ -30,10 +30,10 @@ const getApplicationsById = async (req, res) => {
 const createApplication = async (req, res) => {
     try {
         const application = await Application.create(req.body);
-        const user = application.person;
-        const coverLetter = user.coverLetter.pdf;
-        const name = user.user
-        await main(coverLetter).catch(console.error)
+        // const user = application.person;
+        // const coverLetter = user.coverLetter.pdf;
+        // const name = user.user
+        // await main(coverLetter).catch(console.error)
         console.log("coverLetter")
         res.status(200).json({ message: `User created successfully` })
     } catch (error) {

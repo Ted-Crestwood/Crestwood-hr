@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors')
 const applicationRoute = require('./routes/application.route');
 const userRoute = require('./routes/user.route')
+const signInRoute = require('./routes/userSignIn')
 const uploadCoverLetter = require('./routes/upload.route')
 const getApplicationsById = require('./routes/application.route')
 const dotenv = require('dotenv');
@@ -18,9 +19,10 @@ app.use(express.urlencoded({extended:false}));
 
 
 //routes
-app.use('/', userRoute);
-app.use('/signin', userRoute);
+app.use('/users', userRoute);
+app.use('/signin', signInRoute);
 app.use('/signup', userRoute)
+app.use('/users/:id', userRoute)
 app.use('/applications', applicationRoute )
 app.use('/applications/:id',getApplicationsById)
 app.use('/apply', applicationRoute)
@@ -28,13 +30,11 @@ app.use('/upload/letter', uploadCoverLetter)
 
 
 
-  
 
-
-mongoose.connect("mongodb+srv://new:7668Tamera@auth.ugyg3xh.mongodb.net/?retryWrites=true&w=majority&appName=auth")
+mongoose.connect(process.env.MONGO_URI)
     .then(() => {
         console.log("Connected to database")
-        main()
+
         app.listen(4000, () => {
             console.log("Server listening on port 4000")
         });
