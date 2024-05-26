@@ -38,13 +38,14 @@ app.use('/get/organisations/:id', getOrganisationById)
 app.use('/create/job', createJob)
 app.use('/jobs', getJobs)
 
+const PORT = process.env.PORT || 4000
+app.listen(PORT, () => {
+    console.log("Server listening on port 4000")
+});
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
         console.log("Connected to database")
 
-        app.listen(process.env.PORT, () => {
-            console.log("Server listening on port 4000")
-        });
     })
     .catch(() => {
         console.log("Connection failed!")
