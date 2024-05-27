@@ -20,7 +20,7 @@ async function main(data) {
     new PutObjectCommand({
       Bucket: bucketName,
       Key: "new.pdf",
-      Body: [data],
+      Body: data,
     })
   );
 }

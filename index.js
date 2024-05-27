@@ -13,6 +13,8 @@ const  getAllOrganisation  = require('./routes/organisation.route');
 const getOrganisationById  = require('./routes/organisation.route');
 const  createJob  = require('./routes/job.route');
 const getJobs  = require('./routes/job.route');
+const generateOtp  = require('./routes/otp.route');
+const  verification  = require('./routes/otpVerification.route');
 dotenv.config();
 
 const app = express();
@@ -37,6 +39,9 @@ app.use('/get/organisations', getAllOrganisation)
 app.use('/get/organisations/:id', getOrganisationById)
 app.use('/create/job', createJob)
 app.use('/jobs', getJobs)
+app.use('/otp', generateOtp)
+app.use('/otp/verification' , verification)
+
 
 const PORT = process.env.PORT || 4000;
 const uri = process.env.MONGO_URI;
