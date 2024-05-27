@@ -1,8 +1,9 @@
 const otpGenerator = require('otp-generator');
 const OTP = require('../models/otp.model');
 const nodemailer = require('nodemailer');
+const User = require('../models/user.model');
 
-const generateOtp = async (req, res) => {
+const generateOtp = async (req,res) => {
     const { email } = req.body;
     const otp = otpGenerator.generate(6, {
         digits: true,
@@ -39,10 +40,10 @@ const generateOtp = async (req, res) => {
 }
 
 
-const verifyOtp = async (req, res) => {
+const verifyOtp = async ( req, res) => {
     const { email, otp } = req.body;
     try {
-        const otpRecord = await OTP.findOne({ email, otp });
+        const otpRecord = await OTP.findOne({ email , otp });
         if (otpRecord) {
             res.status(200).send("OTP verified successfully")
         } else {
