@@ -11,7 +11,7 @@ const jobSchema = new Schema({
     responsibilities:{type:String},
     requirements:{type:String},
     goToHave:{type:String},
-    deadline:{type:Date}
+    deadline:{type:String}
 
 })
 const Jobs = model("Jobs",jobSchema)
