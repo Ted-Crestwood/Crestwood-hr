@@ -14,7 +14,7 @@ const generateOtp = async (req, res) => {
         await OTP.create({ email, otp });
         const transporter = nodemailer.createTransport({
             service: "gmail",
-            host: "smtp.gmail.email",
+            host: process.env.HOST,
             port: 587,
             secure: false,
             auth: {
