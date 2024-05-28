@@ -23,6 +23,8 @@ const deleteJob = require('./routes/job.route');
 const updateJob = require('./routes/job.route');
 const updateOrganisation= require('./routes/updateOrganisation.route');
 const  deleteOrganisation  = require('./routes/updateOrganisation.route');
+const updateShortlist  = require('./routes/shortlist.route');
+const deleteShortlist  = require('./routes/shortlist.route');
 
 dotenv.config()
 const app = express();
@@ -54,9 +56,12 @@ app.use('/jobs/delete/:id', deleteJob)
 app.use('/jobs/update/:id', updateJob)
 app.use('/otp', generateOtp)
 app.use('/otp/verification' , verification)
-app.use("/create/shortlist", createShortlst)
+app.use('/create/shortlist', createShortlst)
+app.use('/get/shortlist', getShortlist)
 app.use('/get/shortlist/:id', getShortlistById)
-app.use('/shortlist', getShortlist)
+app.use('/get/shortlist/update/:id', updateShortlist)
+app.use('/get/shortlist/delete/:id', deleteShortlist)
+
 
 const PORT = process.env.PORT || 4000;
 const uri = process.env.MONGO_URI;
