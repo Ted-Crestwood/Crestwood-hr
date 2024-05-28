@@ -15,8 +15,16 @@ const  createJob  = require('./routes/job.route');
 const getJobs  = require('./routes/job.route');
 const generateOtp  = require('./routes/otp.route');
 const  verification  = require('./routes/otpVerification.route');
-dotenv.config();
+const createShortlst = require('./routes/shortlist.route');
+const getShortlistById = require('./routes/shortlist.route');
+const getShortlist = require('./routes/shortlist.route');
+const getJobsById  = require('./routes/job.route');
+const deleteJob = require('./routes/job.route');
+const updateJob = require('./routes/job.route');
+const updateOrganisation= require('./routes/updateOrganisation.route');
+const  deleteOrganisation  = require('./routes/updateOrganisation.route');
 
+dotenv.config()
 const app = express();
 
 //middleware
@@ -37,11 +45,18 @@ app.use('/upload/letter', uploadCoverLetter)
 app.use('/create/organisations' ,createOrganisation)
 app.use('/get/organisations', getAllOrganisation)
 app.use('/get/organisations/:id', getOrganisationById)
+app.use('/get/organisations/update/:id', updateOrganisation)
+app.use('/get/organisations/delete/:id', deleteOrganisation)
 app.use('/create/job', createJob)
 app.use('/jobs', getJobs)
+app.use('/jobs/:id', getJobsById)
+app.use('/jobs/delete/:id', deleteJob)
+app.use('/jobs/update/:id', updateJob)
 app.use('/otp', generateOtp)
 app.use('/otp/verification' , verification)
-
+app.use("/create/shortlist", createShortlst)
+app.use('/get/shortlist/:id', getShortlistById)
+app.use('/shortlist', getShortlist)
 
 const PORT = process.env.PORT || 4000;
 const uri = process.env.MONGO_URI;
