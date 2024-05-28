@@ -23,8 +23,8 @@ const deleteJob = require('./routes/job.route');
 const updateJob = require('./routes/job.route');
 const updateOrganisation= require('./routes/updateOrganisation.route');
 const  deleteOrganisation  = require('./routes/updateOrganisation.route');
-const updateShortlist  = require('./routes/shortlist.route');
-const deleteShortlist  = require('./routes/shortlist.route');
+const updateShortlist  = require('./routes/updateShortlist.route');
+const deleteShortlist  = require('./routes/updateShortlist.route');
 
 dotenv.config()
 const app = express();
