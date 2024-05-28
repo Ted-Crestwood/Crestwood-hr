@@ -44,7 +44,6 @@ const updateOrganisation = async (req, res) => {
     try {
         const { id } = req.params;
         const updatedOrganisation = await Organisation.findByIdAndUpdate(id, req.body)
-        console.log("updated organisation :", updatedOrganisation)
         if (updatedOrganisation) {
             res.status(201).json(updatedOrganisation)
         } else {
