@@ -5,7 +5,7 @@ const User = require('../models/user.model');
 
 const generateOtp = async (req,res) => {
     const { email } = req.body;
-    console.log("email: ", email)
+    const refId = generateRefId()
     const otp = otpGenerator.generate(6, {
         digits: true,
         alphabets: false,
@@ -13,7 +13,7 @@ const generateOtp = async (req,res) => {
         specialChars: false
     })
     try {
-        await OTP.create({ email, otp });
+        await OTP.create({ email, otp ,refId });
         const transporter = nodemailer.createTransport({
             // service: "SMTP",
             host: process.env.HOST,
@@ -39,7 +39,9 @@ const generateOtp = async (req,res) => {
         res.status(500).send("Error sending OTP")
     }
 }
-
+function generateRefId(){
+    return 'CRT'+Date.now().toString(36)+Math.random().toString(36).substring(2,5);
+}
 
 const verifyOtp = async ( req, res) => {
     const { email, otp } = req.body;

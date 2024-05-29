@@ -12,7 +12,8 @@ const organisationSchema = new Schema({
     services:{type:Array},
     location:{type:String},
     field:{type:String},
-    website:{type:String}
+    website:{type:String},
+    refId: { type: String, unique: true }
 },
 {
     timestamps: true,

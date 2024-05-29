@@ -19,6 +19,7 @@ const ProductSchema = mongoose.Schema({
         type: String,
         required: false,
     },
+    refId: { type: String, unique: true }
 },
     {
         timestamps: true,

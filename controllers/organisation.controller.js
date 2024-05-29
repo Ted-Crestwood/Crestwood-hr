@@ -2,7 +2,9 @@ const Organisation = require("../models/organisation.model");
 
 const createOrganisation = (req, res) => {
     try {
-        const organisation = Organisation.create(req.body);
+        const refId = generateRefId()
+        const organisationData = {...req.body, refId}
+        const organisation = Organisation.create(organisationData);
         if (organisation) {
             res.status(201).json({ message: `Organisation created successfully` })
         } else {
@@ -12,7 +14,9 @@ const createOrganisation = (req, res) => {
         res.status(500).json({ message: error.message })
     }
 }
-
+function generateRefId(){
+    return 'CRT'+Date.now().toString(36)+Math.random().toString(36).substring(2,5);
+}
 const getAllOrganisation = async (req, res) => {
     try {
         const organisation = await Organisation.find({});

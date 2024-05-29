@@ -19,11 +19,16 @@ const getSingleProduct = async (req, res) => {
 }
 const createProduct = async(req,res)=>{
     try {
-        const product = await Product.create(req.body);
+        const refId = generateRefId()
+        const productData = {...req.body, refId}
+        const product = await Product.create(productData);
         res.status(200).json(product);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
+}
+function generateRefId(){
+    return 'CRT'+Date.now().toString(36)+Math.random().toString(36).substring(2,5);
 }
 const updateProduct = async(req,res)=>{
     try {
