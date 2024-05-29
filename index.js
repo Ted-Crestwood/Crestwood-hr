@@ -63,10 +63,10 @@ app.use('/get/shortlist/update/:id', updateShortlist)
 app.use('/get/shortlist/delete/:id', deleteShortlist)
 
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 5002;
 const uri = process.env.MONGO_URI;
 app.listen(PORT, () => {
-    console.log("Server listening on port 4000")
+    console.log("Server listening on port 5002")
 });
 mongoose.connect(uri)
     .then(() => {
