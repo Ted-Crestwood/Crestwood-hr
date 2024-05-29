@@ -187,7 +187,8 @@ const ShortlistSchema = new mongoose.Schema({
         type: Buffer,
         contentType: String
       }
-    }
+    },
+    refId: { type: String, unique: true }
   },
 }, {
   timestamps: true,

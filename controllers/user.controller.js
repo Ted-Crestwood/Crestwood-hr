@@ -2,6 +2,7 @@ const User = require("../models/user.model");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+ 
 
 const createUser = async (req, res) => {
     try {
@@ -11,7 +12,9 @@ const createUser = async (req, res) => {
             return res.status(400).json({ message: "Email already exists" })
         }
         const hashPassword = await bcrypt.hash(password, 10);
+        const refId = generateRefId()
         const newUser = await User.create({
+            refId,
             isAdmin,
             name,
             email,
@@ -27,13 +30,15 @@ const createUser = async (req, res) => {
         )
         newUser.token = token
         newUser.password = undefined
-        await new User({ email, password, name, token }).save()
+        await new User({ email, password, name, token,refId }).save()
         res.status(201).json({ message: "User created successfully", user: {email,name}, token:token })
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 }
-
+function generateRefId(){
+    return 'CRT'+Date.now().toString(36)+Math.random().toString(36).substring(2,5);
+}
 const signInUser = async (req, res) => {
     try {
         const { email, password } = req.body;

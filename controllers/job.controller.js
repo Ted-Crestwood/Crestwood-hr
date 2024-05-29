@@ -2,7 +2,9 @@ const Jobs = require("../models/jobs.model");
 
 const createJob = async (req, res) => {
     try {
-        const job = await Jobs.create(req.body);
+        const refId = generateRefId()
+        const jobData = {...req.body, refId}
+        const job = await Jobs.create(jobData);
         if (job) {
             res.status(201).json({ message: 'Job created' })
         } else {
@@ -12,7 +14,9 @@ const createJob = async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 }
-
+function generateRefId(){
+    return 'CRT'+Date.now().toString(36)+Math.random().toString(36).substring(2,5);
+}
 const getJobs = async (req, res) => {
     try {
         const jobs = await Jobs.find({});

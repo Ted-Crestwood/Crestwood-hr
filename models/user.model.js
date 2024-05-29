@@ -13,18 +13,20 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: false,
     },
-    isAdmin:{
-        type:Boolean,
-        default:false
+    isAdmin: {
+        type: Boolean,
+        default: false
     },
-    token:{
-        type:String,
-        default:null
-    }
+    token: {
+        type: String,
+        default: null
+    },
+    refId: { type: String, unique: true }
+    // organisation: { type: mongoose.Schema.Types.ObjectId, ref: 'Organisation' }
 },
     {
         timestamps: true,
     });
 
-    const User = mongoose.model("User",UserSchema);
-    module.exports = User;
+const User = mongoose.model("User", UserSchema);
+module.exports = User;

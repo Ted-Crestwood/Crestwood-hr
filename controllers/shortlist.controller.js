@@ -4,7 +4,8 @@ const Shortlist = require("../models/shortlist.model");
 const createShortlst = async (req, res) => {
     const shortlist = await Shortlist.create(req.body)
     try {
-        const addedShortlist = await Shortlist.create(shortlist)
+        const refId = generateRefId()
+        const addedShortlist = await Shortlist.create(shortlist,{refId})
         if (addedShortlist ) {
             res.status(201).json({ message: "Applicant added to shortlist successfully" })
         } else {
@@ -14,7 +15,9 @@ const createShortlst = async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 }
-
+function generateRefId(){
+    return 'CRT'+Date.now().toString(36)+Math.random().toString(36).substring(2,5);
+}
 const getShortlist = async (req, res) => {
     try {
         const shortlist = await Shortlist.find({})

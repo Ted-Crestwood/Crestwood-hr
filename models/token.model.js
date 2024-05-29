@@ -3,7 +3,8 @@ const { Schema, model } = require("mongoose");
 
 const tokenSchema = new Schema({
     token:{type:String},
-    email:{type:String}
+    email:{type:String},
+    
 },
 {
     timestamps: true,
