@@ -5,6 +5,7 @@ const User = require('../models/user.model');
 
 const generateOtp = async (req,res) => {
     const { email } = req.body;
+    console.log("email: ", email)
     const otp = otpGenerator.generate(6, {
         digits: true,
         alphabets: false,
@@ -14,13 +15,13 @@ const generateOtp = async (req,res) => {
     try {
         await OTP.create({ email, otp });
         const transporter = nodemailer.createTransport({
-            service: "gmail",
+            // service: "SMTP",
             host: process.env.HOST,
-            port: 587,
-            secure: false,
+            port: 465,
+            secure: true,
             auth: {
                 user: process.env.EMAIL,
-                pass: process.env.USER_PASSWORD
+                pass: process.env.SMTP_PASSWORD
             }
         })
         transporter.sendMail({

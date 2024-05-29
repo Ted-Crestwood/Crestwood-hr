@@ -11,8 +11,13 @@ const jobSchema = new Schema({
     responsibilities:{type:String},
     requirements:{type:String},
     goToHave:{type:String},
-    deadline:{type:String}
-
+    deadline:{type:String},
+    organisation:{type:Object},
+    createdOn:{type:String},
+    publishOn:{type:String},
+    extraInformation:{type:String},
+    paymentFormat:{type:String},
+    contractType:{type:String}
 })
 const Jobs = model("Jobs",jobSchema)
 module.exports = Jobs;

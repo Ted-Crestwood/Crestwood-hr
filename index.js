@@ -25,6 +25,7 @@ const updateOrganisation= require('./routes/updateOrganisation.route');
 const  deleteOrganisation  = require('./routes/updateOrganisation.route');
 const updateShortlist  = require('./routes/updateShortlist.route');
 const deleteShortlist  = require('./routes/updateShortlist.route');
+const cookieParser = require('cookie-parser');
 
 dotenv.config()
 const app = express();
@@ -33,7 +34,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
-
+app.use(cookieParser())
 
 //routes
 app.use('/users', userRoute);

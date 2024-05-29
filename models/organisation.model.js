@@ -8,7 +8,11 @@ const organisationSchema = new Schema({
         type: Buffer,
         contentType: String
     },
-    description: { type: String }
+    about: { type: String },
+    services:{type:Array},
+    location:{type:String},
+    field:{type:String},
+    website:{type:String}
 })
 
 const Organisation = model("Organisation", organisationSchema)
