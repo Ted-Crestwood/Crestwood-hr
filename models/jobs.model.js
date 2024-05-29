@@ -17,7 +17,8 @@ const jobSchema = new Schema({
     publishOn:{type:String},
     extraInformation:{type:String},
     paymentFormat:{type:String},
-    contractType:{type:String}
+    contractType:{type:String},
+    slug:{type:String}
 },
 {
     timestamps: true,
