@@ -7,7 +7,7 @@ const signInRoute = require('./routes/userSignIn')
 const uploadCoverLetter = require('./routes/upload.route')
 const getApplicationsById = require('./routes/application.route')
 const dotenv = require('dotenv');
-const { main } = require('./uploads/main');
+dotenv.config()
 const  createOrganisation  = require('./routes/organisation.route');
 const  getAllOrganisation  = require('./routes/organisation.route');
 const getOrganisationById  = require('./routes/organisation.route');
@@ -27,7 +27,6 @@ const updateShortlist  = require('./routes/updateShortlist.route');
 const deleteShortlist  = require('./routes/updateShortlist.route');
 const cookieParser = require('cookie-parser');
 
-dotenv.config()
 const app = express();
 
 //middleware
