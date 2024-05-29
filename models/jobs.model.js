@@ -18,6 +18,9 @@ const jobSchema = new Schema({
     extraInformation:{type:String},
     paymentFormat:{type:String},
     contractType:{type:String}
+},
+{
+    timestamps: true,
 })
 const Jobs = model("Jobs",jobSchema)
 module.exports = Jobs;

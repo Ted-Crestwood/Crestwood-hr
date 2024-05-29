@@ -13,6 +13,9 @@ const organisationSchema = new Schema({
     location:{type:String},
     field:{type:String},
     website:{type:String}
+},
+{
+    timestamps: true,
 })
 
 const Organisation = model("Organisation", organisationSchema)
