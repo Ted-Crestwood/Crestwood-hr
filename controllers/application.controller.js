@@ -1,4 +1,5 @@
 const Application = require("../models/application.model");
+const Jobs = require("../models/jobs.model");
 const { main } = require("../uploads/main");
 
 
@@ -38,10 +39,14 @@ const getApplicationByRefId = async (req, res) => {
 }
 const createApplication = async (req, res) => {
     try {
-        const application = await Application.create(req.body);
+        const {refId, ...applicationData} = req.body;
+        const job = await Jobs.findOne({refId:refId})
+        if(!job){
+            res.status(404).json({message: 'Job does not exist'})
+        }
+        const application = await Application.create(applicationData);
         const user = application.person;
         const coverLetter = user.coverLetter.pdf;
-        const name = user.user
         await main(coverLetter).catch(console.error)
         res.status(200).json({ message: `User created successfully` })
     } catch (error) {
