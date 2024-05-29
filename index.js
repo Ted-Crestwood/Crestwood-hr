@@ -18,7 +18,6 @@ const  verification  = require('./routes/otpVerification.route');
 const createShortlst = require('./routes/shortlist.route');
 const getShortlistById = require('./routes/shortlist.route');
 const getShortlist = require('./routes/shortlist.route');
-const getJobsById  = require('./routes/job.route');
 const deleteJob = require('./routes/job.route');
 const updateJob = require('./routes/job.route');
 const updateOrganisation= require('./routes/updateOrganisation.route');

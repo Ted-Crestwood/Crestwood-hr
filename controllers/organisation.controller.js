@@ -33,7 +33,7 @@ const getAllOrganisation = async (req, res) => {
 const getOrganisationById = async (req, res) => {
     try {
         const { id } = req.params;
-        const organisation = await Organisation.findById(id);
+        const organisation = await Organisation.findById(id,{_id:0});
         if (organisation) {
             res.status(200).json(organisation)
         } else {
@@ -70,4 +70,16 @@ const deleteOrganisation = async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 }
-module.exports = { createOrganisation, getAllOrganisation, getOrganisationById, updateOrganisation, deleteOrganisation }
+const getOrganisationByRefId = async (req, res) => {
+    try {
+        const refId= req.params.refId;
+        const organisation = await Organisation.find({ refId:refId },{_id:0});
+        if(!organisation){
+            return res.status(404).json({message: "Organisation not found"})
+        }
+        res.status(201).json(organisation)
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+module.exports = { createOrganisation, getAllOrganisation, getOrganisationById, updateOrganisation, deleteOrganisation,getOrganisationByRefId }
