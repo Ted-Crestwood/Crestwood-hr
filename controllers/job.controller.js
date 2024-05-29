@@ -75,8 +75,10 @@ const deleteJob = async (req, res) => {
 const getJobByRefId = async (req, res) => {
     try {
         const refId= req.params.refId;
-        console.log("refId :")
-        const jobs = await Jobs.find({ refId:refId });
+        const jobs = await Jobs.find({ refId:refId },{_id:0});
+        if(!jobs){
+            return res.status(404).json({message: "Job not found"})
+        }
         res.status(201).json(jobs)
     } catch (error) {
         res.status(500).json({ message: error.message })
