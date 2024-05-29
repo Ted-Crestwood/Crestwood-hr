@@ -19,7 +19,7 @@ function generateRefId() {
 }
 const getJobs = async (req, res) => {
     try {
-        const jobs = await Jobs.find({});
+        const jobs = await Jobs.find({},{_id:0});
         if (jobs) {
             res.status(201).json(jobs)
         } else {
