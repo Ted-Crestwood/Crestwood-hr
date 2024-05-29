@@ -3,7 +3,7 @@ const Jobs = require("../models/jobs.model");
 const createJob = async (req, res) => {
     try {
         const refId = generateRefId()
-        const jobData = {...req.body, refId}
+        const jobData = { ...req.body, refId }
         const job = await Jobs.create(jobData);
         if (job) {
             res.status(201).json({ message: 'Job created' })
@@ -14,8 +14,8 @@ const createJob = async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 }
-function generateRefId(){
-    return 'CRT'+Date.now().toString(36)+Math.random().toString(36).substring(2,5);
+function generateRefId() {
+    return 'CRT' + Date.now().toString(36) + Math.random().toString(36).substring(2, 5);
 }
 const getJobs = async (req, res) => {
     try {
@@ -72,4 +72,14 @@ const deleteJob = async (req, res) => {
     }
 }
 
-module.exports = { createJob, getJobs, getJobsById, updateJob, deleteJob }
+const getJobByRefId = async (req, res) => {
+    try {
+        const refId= req.params.refId;
+        console.log("refId :")
+        const jobs = await Jobs.find({ refId:refId });
+        res.status(201).json(jobs)
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+module.exports = { createJob, getJobs, getJobsById, updateJob, deleteJob, getJobByRefId }

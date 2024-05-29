@@ -26,6 +26,7 @@ const  deleteOrganisation  = require('./routes/updateOrganisation.route');
 const updateShortlist  = require('./routes/updateShortlist.route');
 const deleteShortlist  = require('./routes/updateShortlist.route');
 const cookieParser = require('cookie-parser');
+const getJobByRefId  = require('./routes/jobRef.route');
 
 const app = express();
 
@@ -51,7 +52,8 @@ app.use('/get/organisations/update/:id', updateOrganisation)
 app.use('/get/organisations/delete/:id', deleteOrganisation)
 app.use('/create/job', createJob)
 app.use('/jobs', getJobs)
-app.use('/jobs/:id', getJobsById)
+// app.use('/jobs/:id', getJobsById)
+app.use('/jobs/:refId', getJobByRefId)
 app.use('/jobs/delete/:id', deleteJob)
 app.use('/jobs/update/:id', updateJob)
 app.use('/otp', generateOtp)
