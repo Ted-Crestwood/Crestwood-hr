@@ -20,7 +20,7 @@ const createUser = async (req, res) => {
         await newUser.save();
         const token = jwt.sign(
             { id: newUser._id },
-            'crestwood',
+            process.env.JWTSECRET,
             {
                 expiresIn: "2h"
             }
