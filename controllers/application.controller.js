@@ -4,7 +4,7 @@ const { main } = require("../uploads/main");
 
 const getApplications = async (req, res) => {
     try {
-        const application = await Application.find({})
+        const application = await Application.find({},{_id:0})
         res.status(200).json(application)
     } catch (error) {
         res.status(500).json({ message: error.message })
@@ -14,7 +14,7 @@ const getApplications = async (req, res) => {
 const getApplicationsById = async (req, res) => {
     try {
         const {id} = req.params;
-        const applications = await Application.findById(id);
+        const applications = await Application.findById(id,{_id:0});
         if (applications) {
             res.status(200).json(applications.person);
         } else {
@@ -24,7 +24,18 @@ const getApplicationsById = async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 }
-
+const getApplicationByRefId = async (req, res) => {
+    try {
+        const refId= req.params.refId;
+        const application = await Application.find({ refId:refId },{_id:0});
+        if(!application){
+            return res.status(404).json({message: "Job not found"})
+        }
+        res.status(201).json(application)
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
 const createApplication = async (req, res) => {
     try {
         const application = await Application.create(req.body);
@@ -37,7 +48,7 @@ const createApplication = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
-module.exports = { createApplication, getApplications, getApplicationsById };
+module.exports = { createApplication, getApplications, getApplicationsById ,getApplicationByRefId};
 // console.log("application:", application)
 
 // const user = application.person[0];
