@@ -36,7 +36,6 @@ app.use(express.urlencoded({extended:false}));
 
 
 //routes
-app.use('/', (req,res)=>{res.send("Home page")});
 app.use('/users', userRoute);
 app.use('/signin', signInRoute);
 app.use('/signup', userRoute)
