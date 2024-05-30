@@ -1,14 +1,29 @@
 const Jobs = require("../models/jobs.model");
+const User = require("../models/user.model");
 
 const createJob = async (req, res) => {
     try {
-        const refId = generateRefId()
-        const jobData = { ...req.body, refId }
-        const job = await Jobs.create(jobData);
-        if (job) {
-            res.status(201).json({ message: 'Job created' })
+        const { email, ...data } = req.body;
+        const {title,location,salary,level,jobType,department,description,responsibilities,requirements,goToHave,organisation,deadline,createdOn,publishOn,extraInformation,
+            paymentFormat,contractType,slug
+        }= data
+        const refId = generateRefId();
+        const user = await User.findOne({ email: email })
+        const userToken = user.token;
+        const authToken = req.headers.authorization;
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' })
+        }
+        if (authToken !== userToken) {
+            return res.status(403).json({ message: 'Unauthorized' })
         } else {
-            res.status(404).json({ message: 'Job not created' })
+            const job = await Jobs.create({title,location,salary,level,jobType,department,description,responsibilities,requirements,goToHave,organisation,deadline,createdOn,publishOn,extraInformation,
+                paymentFormat,contractType,slug, refId});
+            if (job) {
+                return res.status(201).json({ message: 'Job created' })
+            } else {
+                return res.status(404).json({ message: 'Job not created' })
+            }
         }
     } catch (error) {
         res.status(500).json({ message: error.message })
@@ -19,7 +34,7 @@ function generateRefId() {
 }
 const getJobs = async (req, res) => {
     try {
-        const jobs = await Jobs.find({},{_id:0});
+        const jobs = await Jobs.find({}, { _id: 0 });
         if (jobs) {
             res.status(201).json(jobs)
         } else {
@@ -74,10 +89,10 @@ const deleteJob = async (req, res) => {
 
 const getJobByRefId = async (req, res) => {
     try {
-        const refId= req.params.refId;
-        const jobs = await Jobs.find({ refId:refId },{_id:0});
-        if(!jobs){
-            return res.status(404).json({message: "Job not found"})
+        const refId = req.params.refId;
+        const jobs = await Jobs.find({ refId: refId }, { _id: 0 });
+        if (!jobs) {
+            return res.status(404).json({ message: "Job not found" })
         }
         res.status(201).json(jobs)
     } catch (error) {

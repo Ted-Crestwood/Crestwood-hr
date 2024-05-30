@@ -75,7 +75,7 @@ const signInUser = async (req, res) => {
 
 const getUser = async (req, res) => {
     try {
-        const user = await User.find({})
+        const user = await User.find({},{_id:0})
         res.status(200).json(user)
     } catch (error) {
         res.status(500).json({ message: error.message })
