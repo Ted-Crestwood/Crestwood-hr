@@ -11,6 +11,7 @@ const createJob = async (req, res) => {
         const authToken = req.headers.authorization;
         const user = await User.findOne({ token: authToken })
         const userToken = user.token;
+       
         if (!user) {
             return res.status(404).json({ message: 'User not found' })
         }
@@ -26,7 +27,7 @@ const createJob = async (req, res) => {
             }
         }
     } catch (error) {
-        res.status(500).json({ message: error.message })
+      return res.status(500).json({ message: error.message })
     }
 }
 function generateRefId() {

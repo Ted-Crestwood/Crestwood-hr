@@ -18,9 +18,9 @@ const createUser = async (req, res) => {
             isAdmin,
             name,
             email,
-            password: hashPassword
+            password: hashPassword,
+            token:''
         })
-        await newUser.save();
         const token = jwt.sign(
             { id: newUser._id },
             process.env.JWTSECRET,
@@ -28,10 +28,10 @@ const createUser = async (req, res) => {
                 expiresIn: "2h"
             }
         )
-        newUser.token = token
+        newUser.token = token;
+        await newUser.save();
         newUser.password = undefined
-        await new User({ email, password:hashPassword, name, token, refId }).save()
-        return res.status(201).json({ message: "User created successfully", user: { email, name }, token: token })
+        return res.status(201).json({ message: "User created successfully", user: { email, name  }, token: token })
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
@@ -58,6 +58,7 @@ const signInUser = async (req, res) => {
             }
         );
         user.token = token;
+        
         user.password = undefined
 
         const options = {
