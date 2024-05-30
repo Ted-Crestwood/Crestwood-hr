@@ -33,10 +33,10 @@ const generateOtp = async (req,res) => {
             subject: "OTP Verification",
             text: `Your OTP for verification is: ${otp}`
         })
-        res.status(200).send("OTP sent successfully")
+        return  res.status(200).send("OTP sent successfully")
     } catch (error) {
         console.error(error)
-        res.status(500).send("Error sending OTP")
+        return  res.status(500).send("Error sending OTP")
     }
 }
 function generateRefId(){
@@ -48,13 +48,13 @@ const verifyOtp = async ( req, res) => {
     try {
         const otpRecord = await OTP.findOne({ email , otp });
         if (otpRecord) {
-            res.status(200).send("OTP verified successfully")
+            return  res.status(200).send("OTP verified successfully")
         } else {
-            res.status(400).send("Invalid OTP")
+            return  res.status(400).send("Invalid OTP")
         }
     } catch (error) {
         console.error(error)
-        res.status(500).send("Error verifying OTP")
+        return  res.status(500).send("Error verifying OTP")
     }
 }
 

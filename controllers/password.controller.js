@@ -7,7 +7,7 @@ const forgotPassword =async(req,res)=>{
         const {email} = req.body;
         const userDetails = await User.find({email})
         if(!userDetails){
-            res.status(404).json({message: 'Email not found!'})
+            return res.status(404).json({message: 'Email not found!'})
         }
         const token = crypto.randomBytes(20).toString('hex')
         const tokenExpiration = Date.now() + 3600000;
@@ -36,11 +36,11 @@ const forgotPassword =async(req,res)=>{
             + `http://${req.headers.host}/reset-password/${token}`
             + `If you did not request this, please ignore this email and your password will remain unchanged.`
         }) 
-        res.status(201).json({
+        return res.status(201).json({
             message:'Token sent successfully'
         })
     } catch (error) {
-        res.status(500).json({message: 'Server error'})
+        return res.status(500).json({message: 'Server error'})
     }
 }
 const resetPassword=async(req,res)=>{

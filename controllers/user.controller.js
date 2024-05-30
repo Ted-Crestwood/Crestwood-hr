@@ -2,7 +2,7 @@ const User = require("../models/user.model");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
- 
+
 
 const createUser = async (req, res) => {
     try {
@@ -30,14 +30,14 @@ const createUser = async (req, res) => {
         )
         newUser.token = token
         newUser.password = undefined
-        await new User({ email, password, name, token,refId }).save()
-        res.status(201).json({ message: "User created successfully", user: {email,name}, token:token })
+        await new User({ email, password, name, token, refId }).save()
+        return res.status(201).json({ message: "User created successfully", user: { email, name }, token: token })
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 }
-function generateRefId(){
-    return 'CRT'+Date.now().toString(36)+Math.random().toString(36).substring(2,5);
+function generateRefId() {
+    return 'CRT' + Date.now().toString(36) + Math.random().toString(36).substring(2, 5);
 }
 const signInUser = async (req, res) => {
     try {
@@ -64,21 +64,18 @@ const signInUser = async (req, res) => {
             expires: new Date(Date.now() + 3 * 24 * 60 * 1000),
             httpOnly: true
         }
-        // res.status(200).cookie("token", token,options).json({
-        //     success:true, token
-        // })
-        res.status(201).cookie("token", token, options).json({ message: "Sign in successfully" });
+        return res.status(201).cookie("token", token, options).json({ message: "Sign in successfully" });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
 const getUser = async (req, res) => {
     try {
-        const user = await User.find({},{_id:0})
-        res.status(200).json(user)
+        const user = await User.find({}, { _id: 0 })
+        return res.status(200).json(user)
     } catch (error) {
-        res.status(500).json({ message: error.message })
+        return res.status(500).json({ message: error.message })
     }
 }
 const getUserById = async (req, res) => {
@@ -90,9 +87,9 @@ const getUserById = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
 
-        res.status(200).json(user);
+        return res.status(200).json(user);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
