@@ -30,7 +30,7 @@ const createUser = async (req, res) => {
         )
         newUser.token = token
         newUser.password = undefined
-        await new User({ email, password, name, token, refId }).save()
+        await new User({ email, password:hashPassword, name, token, refId }).save()
         return res.status(201).json({ message: "User created successfully", user: { email, name }, token: token })
     } catch (error) {
         return res.status(500).json({ message: error.message });

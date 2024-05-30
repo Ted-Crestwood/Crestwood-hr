@@ -8,9 +8,9 @@ const createJob = async (req, res) => {
             paymentFormat,contractType,slug
         }= data
         const refId = generateRefId();
-        const user = await User.findOne({ email: email })
-        const userToken = user.token;
         const authToken = req.headers.authorization;
+        const user = await User.findOne({ token: authToken })
+        const userToken = user.token;
         if (!user) {
             return res.status(404).json({ message: 'User not found' })
         }
