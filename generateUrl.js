@@ -7,20 +7,19 @@ AWS.config.update({
 })
 const s3 = new AWS.S3();
 
-const generateSignedUrl = (fileName,expirationTimeInSeconds)=>{
+const generateSignedUrl = async(fileName,expirationTimeInSeconds,fileStream,type)=>{
     const params = {
         Bucket:process.env.BUCKET_NAME,
         Key:fileName,
+        Body:fileStream,
         Expires:expirationTimeInSeconds
     }
-    return new Promise((resolve,reject)=>{
-        s3.getSignedUrl('putObject', params,(err,url)=>{
-            if(err){
-                reject(err)
-            }else{
-                resolve(url)
-            }
-        })
-    })
+    try {
+        const url = await s3.getSignedUrl(type, params)
+        return url;
+    } catch (error) {
+        console.error(error.message)
+    }
+
 }
 module.exports = generateSignedUrl;
