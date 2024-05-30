@@ -47,18 +47,13 @@ function generateRefId() {
 }
 const signInUser = async (req, res) => {
     try {
-        const { email, password,otp } = req.body;
+        const { email, password } = req.body;
         const user = await User.findOne({ email });
         let { name, refId, createdAt, verified } = user;
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!user && !isPasswordValid) {
             return res.status(401).json({ message: "Invalid email or password" });
-        } else {
-            const verification = await verifyOtp({ email, otp })
-            if(verification){
-                return res.status(201).json({message:'User verification successful'})
-            }
-        }
+        } 
         const token = jwt.sign(
             { id: user._id },
             process.env.JWTSECRET,
