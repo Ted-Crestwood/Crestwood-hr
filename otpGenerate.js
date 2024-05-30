@@ -24,7 +24,7 @@ const generateOtps = async ({email}) => {
         })
         transporter.sendMail({
             from: {
-                name: "Admin",
+                name: "Crestwood",
                 address: process.env.EMAIL,
             },
             to: email,

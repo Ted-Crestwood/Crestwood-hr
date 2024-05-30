@@ -40,7 +40,7 @@ app.use('/users', userRoute);
 app.use('/signin', signInRoute);
 app.use('/signup', userRoute)
 app.use('/users/:id', userRoute)
-app.use('/applications', applicationRoute )
+// app.use('/applications', applicationRoute )
 app.use('/applications/:id',getApplicationsById)
 app.use('/apply', applicationRoute)
 app.use('/upload', upload)

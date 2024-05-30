@@ -39,19 +39,29 @@ const getApplicationByRefId = async (req, res) => {
 }
 const createApplication = async (req, res) => {
     try {
+        
         const {refId, ...applicationData} = req.body;
         const job = await Jobs.findOne({refId:refId})
         if(!job){
             return res.status(404).json({message: 'Job does not exist'})
         }
         const application = await Application.create(applicationData);
-        const user = application.person;
-        const coverLetter = user.coverLetter.pdf;
-        await main(coverLetter).catch(console.error)
+        if(!application){
+            return res.status(404).json({message:'Failed to create application'})
+        }
+        return res.status(201).json({message:'Application successful',applications:application ,_id:0})
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
 }
+// const applyBasedOnJobId=async()=>{
+//     try {
+//         const {id} = req.params;
+//         const job
+//     } catch (error) {
+        
+//     }
+// }
 module.exports = { createApplication, getApplications, getApplicationsById ,getApplicationByRefId};
 // console.log("application:", application)
 

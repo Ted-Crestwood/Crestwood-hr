@@ -1,6 +1,8 @@
 const User = require("../models/user.model");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const generateOtps = require("../otpGenerate");
+const verifyOtp = require("../otpVerification");
 
 
 
@@ -13,14 +15,18 @@ const createUser = async (req, res) => {
         }
         const hashPassword = await bcrypt.hash(password, 10);
         const refId = generateRefId()
-        const newUser = await User.create({
-            refId,
-            isAdmin,
-            name,
-            email,
-            password: hashPassword,
-            token:''
-        })
+        const otp = await generateOtps({ email })
+        let newUser
+        if (otp) {
+            newUser = await User.create({
+                refId,
+                isAdmin,
+                name,
+                email,
+                password: hashPassword,
+                token: ''
+            })
+        }
         const token = jwt.sign(
             { id: newUser._id },
             process.env.JWTSECRET,
@@ -31,7 +37,7 @@ const createUser = async (req, res) => {
         newUser.token = token;
         await newUser.save();
         newUser.password = undefined
-        return res.status(201).json({ message: "User created successfully", user: { email, name  }, token: token })
+        return res.status(201).json({ message: "User created successfully", user: { email, name }, token: token })
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
@@ -41,15 +47,17 @@ function generateRefId() {
 }
 const signInUser = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { email, password,otp } = req.body;
         const user = await User.findOne({ email });
-        let {name,refId,createdAt,verified} = user;
-        if (!user) {
-            return res.status(401).json({ message: "Invalid email or password" });
-        }
+        let { name, refId, createdAt, verified } = user;
         const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) {
+        if (!user && !isPasswordValid) {
             return res.status(401).json({ message: "Invalid email or password" });
+        } else {
+            const verification = await verifyOtp({ email, otp })
+            if(verification){
+                return res.status(201).json({message:'User verification successful'})
+            }
         }
         const token = jwt.sign(
             { id: user._id },
@@ -59,14 +67,14 @@ const signInUser = async (req, res) => {
             }
         );
         user.token = token;
-        
+
         user.password = undefined
 
         const options = {
             expires: new Date(Date.now() + 3 * 24 * 60 * 1000),
             httpOnly: true
         }
-        return res.status(201).cookie("token", token, options).json({ message: "Sign in successfully" ,token:token,data:{name,refId,createdAt,verified,email}});
+        return res.status(201).cookie("token", token, options).json({ message: "Sign in successfully", token: token, data: { name, refId, createdAt, verified, email } });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
@@ -74,7 +82,7 @@ const signInUser = async (req, res) => {
 
 const getUser = async (req, res) => {
     try {
-        const user = await User.find({}, { _id: 0,password:0 })
+        const user = await User.find({}, { _id: 0, password: 0 })
         return res.status(200).json(user)
     } catch (error) {
         return res.status(500).json({ message: error.message })

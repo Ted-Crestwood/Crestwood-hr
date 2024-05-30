@@ -50,7 +50,7 @@ const createPresignedUrlWithClient = ({ region, bucket, key, commandType }) => {
 // Endpoint to generate presigned URL for PUT using S3 client
 const generateUrl= async (req, res) => {
   const { key } = req.query;
-  console.log("bucket :", BUCKET)
+  console.log("bucket",)
 
   try {
     const url = await createPresignedUrlWithClient({
