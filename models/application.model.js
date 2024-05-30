@@ -22,7 +22,7 @@ const ApplicationSchema = new mongoose.Schema({
         endDate:{type:String},
       },
     ],
-    yearsOfExperience: {type:String ,default:null},
+    yearsOfExperience: {type:Number ,default:null},
     certifications: [
       {
         name: {type:String},
