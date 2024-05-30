@@ -43,6 +43,7 @@ const signInUser = async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
+        let {name,refId,createdAt,verified} = user;
         if (!user) {
             return res.status(401).json({ message: "Invalid email or password" });
         }
@@ -65,7 +66,7 @@ const signInUser = async (req, res) => {
             expires: new Date(Date.now() + 3 * 24 * 60 * 1000),
             httpOnly: true
         }
-        return res.status(201).cookie("token", token, options).json({ message: "Sign in successfully" });
+        return res.status(201).cookie("token", token, options).json({ message: "Sign in successfully" ,token:token,data:{name,refId,createdAt,verified,email}});
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
