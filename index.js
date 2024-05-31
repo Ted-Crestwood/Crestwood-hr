@@ -4,7 +4,6 @@ const cors = require('cors')
 const applicationRoute = require('./routes/application.route');
 const userRoute = require('./routes/user.route')
 const signInRoute = require('./routes/userSignIn')
-const upload = require('./routes/upload.route')
 const getApplicationsById = require('./routes/application.route')
 const dotenv = require('dotenv');
 dotenv.config()
@@ -26,7 +25,7 @@ const updateShortlist  = require('./routes/updateShortlist.route');
 const deleteShortlist  = require('./routes/updateShortlist.route');
 const cookieParser = require('cookie-parser');
 const getJobByRefId  = require('./routes/jobRef.route');
-
+const file = require('./routes/file.route')
 const app = express();
 
 //middleware
@@ -36,6 +35,7 @@ app.use(express.urlencoded({extended:false}));
 app.use(cookieParser())
 
 //routes
+
 app.use('/users', userRoute);
 app.use('/signin', signInRoute);
 app.use('/signup', userRoute)
@@ -43,7 +43,6 @@ app.use('/users/:id', userRoute)
 // app.use('/applications', applicationRoute )
 app.use('/applications/:id',getApplicationsById)
 app.use('/apply', applicationRoute)
-app.use('/upload', upload)
 app.use('/create/organisations' ,createOrganisation)
 app.use('/get/organisations', getAllOrganisation)
 app.use('/get/organisations/:id', getOrganisationById)
@@ -51,6 +50,7 @@ app.use('/get/organisations/update/:id', updateOrganisation)
 app.use('/get/organisations/delete/:id', deleteOrganisation)
 app.use('/create/job', createJob)
 app.use('/jobs', getJobs)
+// app.use('/api', fileUpload)
 // app.use('/jobs/:id', getJobsById)
 app.use('/jobs/:refId', getJobByRefId)
 app.use('/jobs/delete/:id', deleteJob)
@@ -62,6 +62,7 @@ app.use('/get/shortlist', getShortlist)
 app.use('/get/shortlist/:id', getShortlistById)
 app.use('/get/shortlist/update/:id', updateShortlist)
 app.use('/get/shortlist/delete/:id', deleteShortlist)
+app.use('/upload', file)
 
 
 const PORT = process.env.PORT || 5002;
