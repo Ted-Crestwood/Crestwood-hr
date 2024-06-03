@@ -21,9 +21,9 @@ const UserSchema = mongoose.Schema({
         type: String,
         default: null
     },
-    verified:{type:Boolean, default:false},
+    verified: { type: Boolean, default: false },
     refId: { type: String, unique: true },
-    
+    resetCode: { type: String, default: null }
     // organisation: { type: mongoose.Schema.Types.ObjectId, ref: 'Organisation' }
 },
     {

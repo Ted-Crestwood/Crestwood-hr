@@ -51,7 +51,6 @@ const signedUrlFunction = async (req, res) => {
         let {key, content_type} = req.body;
         key = 'public/' + key;
         const data = await createPresignedPost({key, contentType: content_type})
-    
         return res.send({
             status: 'success',
             data,
