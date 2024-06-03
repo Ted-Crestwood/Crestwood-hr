@@ -1,6 +1,17 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
 const ApplicationSchema = new mongoose.Schema({
+  userData: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  job: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Job',
+    required: true
+  },
   user: {
     firstName: {type:String},
     lastName:{type:String},
@@ -57,6 +68,7 @@ const ApplicationSchema = new mongoose.Schema({
     cv: {type:String},
     coverLetter: {type:String},
     documents: {type:Array},
+
   },
 }, {
   timestamps: true,
