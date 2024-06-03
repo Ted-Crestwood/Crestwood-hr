@@ -48,7 +48,7 @@ const resetPassword = async (req, res) => {
             return res.status(404).json({ message: 'Password already exists' })
         }
         user.password = encryptedPassword;
-        return res.status(201).json({message: 'New password created successfully'})
+        return res.status(201).json({ message: 'New password created successfully' })
     } catch (error) {
 
     }
