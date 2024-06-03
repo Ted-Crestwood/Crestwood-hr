@@ -1,7 +1,10 @@
 const Application = require("../models/application.model");
 const Jobs = require("../models/jobs.model");
+const User = require("../models/user.model");
 const generateOtps = require("../otpGenerate");
 const { main } = require("../uploads/main");
+const sendMails = require("../util/sendMails");
+const Token = require("../util/token");
 
 
 const getApplications = async (req, res) => {
@@ -41,17 +44,24 @@ const getApplicationByRefId = async (req, res) => {
 const createApplication = async (req, res) => {
     try {
         
-        const {refId,email, ...applicationData} = req.body;
+        const {refId,email,fullName, ...applicationData} = req.body;
         const job = await Jobs.findOne({refId:refId})
         if(!job){
             return res.status(404).json({message: 'Job does not exist'})
         }
+        const existingUser = await User.findOne({email:email});
+        const password = await Token(1)
+        if(!existingUser){
+            await User.create({email,password,name:fullName,password:password})
+            await sendMails({ email:email, subject:'Account creation', text:'Your account was created successfully', name:fullName })
+            return res.status(201).json({message: 'Your account was created successfully'})
+        }
         await generateOtps({email})
         const application = await Application.create(applicationData);
         if(!application){
-            return res.status(404).json({message:'Failed to create application'})
+            return res.status(404).json({message:'Failed to submit application'})
         }
-        return res.status(201).json({message:'Application successful',applications:application ,_id:0})
+        return res.status(201).json({message:'Application submitted successful',applications:application ,_id:0})
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
