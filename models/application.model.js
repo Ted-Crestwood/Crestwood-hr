@@ -13,61 +13,61 @@ const ApplicationSchema = new mongoose.Schema({
     required: true
   },
   user: {
-    firstName: {type:String},
-    lastName:{type:String},
-    surname: {type:String},
-    fullName: {type:String},
-    email: {type:String},
-    phone: {type:String},
-    designation: {type:String},
-    organization: {type:String},
-    dateOfBirth: {type:String},
-    address: {type:String},
-    nationality: {type:String},
+    firstName: { type: String },
+    lastName: { type: String },
+    surname: { type: String },
+    fullName: { type: String },
+    email: { type: String },
+    phone: { type: String },
+    designation: { type: String },
+    organization: { type: String },
+    dateOfBirth: { type: String },
+    address: { type: String },
+    nationality: { type: String },
     education: [
-       {
-        level:{type:String},
-        institution:{type:String},
-        specialization:{type:String},
-        startDate:{type:String},
-        endDate:{type:String},
+      {
+        level: { type: String },
+        institution: { type: String },
+        specialization: { type: String },
+        startDate: { type: String },
+        endDate: { type: String },
       },
     ],
-    yearsOfExperience: {type:Number ,default:null},
+    yearsOfExperience: { type: Number, default: null },
     certifications: [
       {
-        name: {type:String},
-        institution:{type:String},
-        date:{type:String},
+        name: { type: String },
+        institution: { type: String },
+        date: { type: String },
       }
     ],
     workHistory: [
       {
-        institution: {type:String},
-        role: {type:String},
-        description: {type:String},
-        joined: {type:String},
-        left: {type:String},
+        institution: { type: String },
+        role: { type: String },
+        description: { type: String },
+        joined: { type: String },
+        left: { type: String },
       }
     ],
     referees: [
       {
-        name: {type:String},
-        email: {type:String},
-        phone: {type:String},
-        designation: {type:String},
-        organization:{type:String},
+        name: { type: String },
+        email: { type: String },
+        phone: { type: String },
+        designation: { type: String },
+        organization: { type: String },
       },
     ],
     memberships: [
       {
-        institution: {type:String},
-        date: {type:String},
+        institution: { type: String },
+        date: { type: String },
       }
     ],
-    cv: {type:String},
-    coverLetter: {type:String},
-    documents: {type:Array},
+    cv: { type: String },
+    coverLetter: { type: String },
+    documents: { type: Array },
 
   },
 }, {
