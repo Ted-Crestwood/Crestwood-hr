@@ -1,10 +1,5 @@
 const User = require("../models/user.model");
-const crypto = require('crypto');
-const nodemailer = require('nodemailer');
-const passwordToken = require("../models/passwordToken.model");
-const Token = require("../util/token");
 const sendMails = require("../util/sendMails");
-const OTP = require("../models/otp.model");
 const otpGenerator = require('otp-generator');
 const bcrypt = require("bcrypt");
 
