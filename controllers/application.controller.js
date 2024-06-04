@@ -91,14 +91,5 @@ const getApplicationsLast30Days = async (req, res) => {
     }
 };
 
-const getOpenJobs = async (req, res) => {
-    try {
-        const currentDate = new Date()
-        const openJobs = await Jobs.find({ deadline: { $gte: currentDate } });
-        return res.status(200).json({ openJobs });
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: error.message });
-    }
-};
-module.exports = { createApplication, getApplications, getApplicationsById, getApplicationByRefId, getTotalApplications, getApplicationsLast30Days, getOpenJobs };
+
+module.exports = { createApplication, getApplications, getApplicationsById, getApplicationByRefId, getTotalApplications, getApplicationsLast30Days };

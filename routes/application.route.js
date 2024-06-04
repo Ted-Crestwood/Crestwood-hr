@@ -1,6 +1,6 @@
 const express = require('express');
 const multer = require('multer');
-const { createApplication, getApplications, getApplicationsById, getTotalApplications, getApplicationsLast30Days, getOpenJobs } = require('../controllers/application.controller');
+const { createApplication, getApplications, getApplicationsById, getTotalApplications, getApplicationsLast30Days } = require('../controllers/application.controller');
 const router = express.Router();
 
 const upload = multer({
@@ -13,5 +13,4 @@ router.get('/:id', getApplicationsById)
 router.post('/',  createApplication);
 router.get('/total', getTotalApplications)
 router.get('/thirtydays',getApplicationsLast30Days)
-router.get('/open', getOpenJobs)
 module.exports = router;

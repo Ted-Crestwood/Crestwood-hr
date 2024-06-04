@@ -100,4 +100,19 @@ const getJobByRefId = async (req, res) => {
         return res.status(500).json({ message: error.message })
     }
 }
-module.exports = { createJob, getJobs, getJobsById, updateJob, deleteJob, getJobByRefId }
+
+const getOpenJobs = async (req, res) => {
+    try {
+        const currentDate = new Date().toISOString().split('T')[0];
+        const jobs = await Jobs.find({ });
+        const deadline = jobs.map(job=>({deadline:job.deadline.toISOString().split('T')[0]}));
+        if(deadline>currentDate){
+            return res.status(201).json({openJobs:deadline.length})
+        }
+        return res.status(404).json({message: 'There are no job openings'})
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: error.message });
+    }
+};
+module.exports = { createJob, getJobs, getJobsById, updateJob, deleteJob, getJobByRefId,getOpenJobs }
