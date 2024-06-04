@@ -68,4 +68,37 @@ const createApplication = async (req, res) => {
     }
 }
 
-module.exports = { createApplication, getApplications, getApplicationsById, getApplicationByRefId };
+const getTotalApplications = async (req, res) => {
+    try {
+        const totalApplications = await Application.countDocuments()
+        return res.status(201).json({ message: `Total applications submitted ${totalApplications}` })
+    } catch (error) {
+        return res.status(500).json({ message: error.message })
+    }
+}
+const getApplicationsLast30Days = async (req, res) => {
+    try {
+        const today = new Date();
+        const thirtyDaysAgo = new Date(today.setDate(today.getDate() - 30));
+        const applications = await Application.find({
+            createdAt: { $gte: thirtyDaysAgo }
+        });
+        console.log(applications)
+        return res.status(200).json({ applications });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+const getOpenJobs = async (req, res) => {
+    try {
+        const currentDate = new Date()
+        const openJobs = await Jobs.find({ deadline: { $gte: currentDate } });
+        return res.status(200).json({ openJobs });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: error.message });
+    }
+};
+module.exports = { createApplication, getApplications, getApplicationsById, getApplicationByRefId, getTotalApplications, getApplicationsLast30Days, getOpenJobs };

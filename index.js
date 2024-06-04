@@ -28,6 +28,7 @@ const getJobByRefId = require('./routes/jobRef.route');
 const file = require('./routes/file.route');
 const forgotPassword = require('./routes/password.route');
 const {resetPassword} = require('./controllers/password.controller');
+const  {getTotalApplications, getApplicationsLast30Days, getOpenJobs} = require('./controllers/application.controller');
 const app = express();
 
 //middleware
@@ -44,6 +45,9 @@ app.use('/signup', userRoute)
 app.use('/users/:id', userRoute)
 // app.use('/applications', applicationRoute )
 app.use('/applications/:id', getApplicationsById)
+app.use('/applications/total', getTotalApplications)
+app.use('/applications/thirtydays' , getApplicationsLast30Days)
+app.use('/applications/open', getOpenJobs)
 app.use('/apply', applicationRoute)
 app.use('/create/organisations', createOrganisation)
 app.use('/get/organisations', getAllOrganisation)
@@ -52,6 +56,7 @@ app.use('/get/organisations/update/:id', updateOrganisation)
 app.use('/get/organisations/delete/:id', deleteOrganisation)
 app.use('/create/job', createJob)
 app.use('/jobs', getJobs)
+app.use('/jobs/open', getOpenJobs)
 // app.use('/api', fileUpload)
 // app.use('/jobs/:id', getJobsById)
 app.use('/jobs/:refId', getJobByRefId)

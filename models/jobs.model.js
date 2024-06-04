@@ -11,7 +11,7 @@ const jobSchema = new Schema({
     responsibilities:{type:String},
     requirements:{type:String},
     goToHave:{type:String},
-    deadline:{type:String},
+    deadline:{type:Date},
     organisation:{type:Object},
     createdOn:{type:String},
     publishOn:{type:String},
