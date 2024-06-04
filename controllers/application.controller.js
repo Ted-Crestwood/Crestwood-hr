@@ -71,7 +71,7 @@ const createApplication = async (req, res) => {
 const getTotalApplications = async (req, res) => {
     try {
         const totalApplications = await Application.countDocuments()
-        return res.status(201).json({ message: `Total applications submitted ${totalApplications}` })
+        return res.status(201).json({ totalJobs: totalApplications })
     } catch (error) {
         return res.status(500).json({ message: error.message })
     }
