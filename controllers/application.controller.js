@@ -43,7 +43,6 @@ const getApplicationByRefId = async (req, res) => {
 }
 const createApplication = async (req, res) => {
     try {
-
         const { refId, email, fullName, ...applicationData } = req.body;
         const job = await Jobs.findOne({ refId: refId })
         if (!job) {

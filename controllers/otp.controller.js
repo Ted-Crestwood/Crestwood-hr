@@ -33,7 +33,8 @@ const generateOtp = async (req,res) => {
             subject: "OTP Verification",
             text: `Your OTP for verification is: ${otp}`
         })
-        return  res.status(200).send("OTP sent successfully")
+        res.status(200).send("OTP sent successfully")
+        return otp;
     } catch (error) {
         console.error(error)
         return  res.status(500).send("Error sending OTP")
