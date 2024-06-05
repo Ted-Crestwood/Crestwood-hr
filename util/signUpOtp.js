@@ -2,7 +2,6 @@ const otpGenerator = require('otp-generator');
 const nodemailer = require('nodemailer');
 
 const signUpOtp = async ({email}) => {
-console.log("otpmail:",email)
     // Validate email
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         return res.status(400).send("Invalid email address");
