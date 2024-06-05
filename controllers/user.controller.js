@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const generateOtps = require("../otpGenerate");
 const verifyOtp = require("../otpVerification");
+const signUpOtp = require("../util/signUpOtp");
 
 
 
@@ -15,28 +16,37 @@ const createUser = async (req, res) => {
         }
         const hashPassword = await bcrypt.hash(password, 10);
         const refId = generateRefId()
-        const otp = await generateOtps({ email })
-        let newUser
-        if (otp) {
-            newUser = await User.create({
-                refId,
-                isAdmin,
-                name,
-                email,
-                password: hashPassword,
-                token: ''
-            })
-        }
+        const otp =  await signUpOtp({email})
+        console.log("otp :", otp)
         const token = jwt.sign(
-            { id: newUser._id },
+            { id: 1 },
             process.env.JWTSECRET,
             {
                 expiresIn: "2h"
             }
         )
+        let newUser = await User.create({
+            refId,
+            isAdmin,
+            name,
+            email,
+            password: hashPassword,
+            token: token
+        })
+        // if (otp) {
+        //     newUser = await User.create({
+        //         refId,
+        //         isAdmin,
+        //         name,
+        //         email,
+        //         password: hashPassword,
+        //         token: token
+        //     })
+        // }
+        console.log("user :", newUser)
         newUser.token = token;
-        await newUser.save();
-        newUser.password = undefined
+        // await newUser.save();
+        // newUser.password = undefined
         return res.status(201).json({ message: "User created successfully", user: { email, name }, token: token })
     } catch (error) {
         return res.status(500).json({ message: error.message });

@@ -23,10 +23,7 @@ const generateOtps = async ({email}) => {
             }
         })
         transporter.sendMail({
-            from: {
-                name: "Crestwood",
-                address: process.env.EMAIL,
-            },
+            from: "recruit@crestwood.co.ke",
             to: email,
             subject: "OTP Verification",
             text: `Your OTP for verification is: ${otp}`
@@ -38,4 +35,4 @@ const generateOtps = async ({email}) => {
         // res.status(500).send("Error sending OTP")
     }
 }
-module.exports = generateOtps
+module.exports = {generateOtps}

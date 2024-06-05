@@ -3,19 +3,29 @@ const OTP = require('../models/otp.model');
 const nodemailer = require('nodemailer');
 const User = require('../models/user.model');
 
-const generateOtp = async (req,res) => {
+function generateRefId() {
+    return 'CRT' + Date.now().toString(36) + Math.random().toString(36).substring(2, 5);
+}
+
+const generateOtp = async (req, res) => {
     const { email } = req.body;
-    const refId = generateRefId()
+    // Validate email
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        return res.status(400).send("Invalid email address");
+    }
+
+    const refId = generateRefId();
     const otp = otpGenerator.generate(6, {
         digits: true,
         alphabets: false,
         upperCase: false,
         specialChars: false
-    })
+    });
+
     try {
-        await OTP.create({ email, otp ,refId });
-        const transporter = nodemailer.createTransport({
-            // service: "SMTP",
+        await OTP.create({ email, otp, refId });
+
+        let transporter = nodemailer.createTransport({
             host: process.env.HOST,
             port: 465,
             secure: true,
@@ -23,40 +33,44 @@ const generateOtp = async (req,res) => {
                 user: process.env.EMAIL,
                 pass: process.env.SMTP_PASSWORD
             }
-        })
-        transporter.sendMail({
-            from: {
-                name: "Admin",
-                address: process.env.EMAIL,
-            },
+        });
+
+        const mailOptions = {
+            from: "recruit@crestwood.co.ke",
             to: email,
             subject: "OTP Verification",
             text: `Your OTP for verification is: ${otp}`
-        })
-        res.status(200).send("OTP sent successfully")
-        return otp;
-    } catch (error) {
-        console.error(error)
-        return  res.status(500).send("Error sending OTP")
-    }
-}
-function generateRefId(){
-    return 'CRT'+Date.now().toString(36)+Math.random().toString(36).substring(2,5);
-}
+        };
 
-const verifyOtp = async ( req, res) => {
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.error("Error sending email:", error);
+                return res.status(500).send("Error sending OTP");
+            } else {
+                console.log("Email sent:", info.response);
+                res.status(200).send("OTP sent successfully");
+            }
+        });
+
+    } catch (error) {
+        console.error("Error creating OTP:", error);
+        return res.status(500).send("Error sending OTP");
+    }
+};
+
+const verifyOtp = async (req, res) => {
     const { email, otp } = req.body;
     try {
-        const otpRecord = await OTP.findOne({ email , otp });
+        const otpRecord = await OTP.findOne({ email, otp });
         if (otpRecord) {
-            return  res.status(200).send("OTP verified successfully")
+            return res.status(200).send("OTP verified successfully");
         } else {
-            return  res.status(400).send("Invalid OTP")
+            return res.status(400).send("Invalid OTP");
         }
     } catch (error) {
-        console.error(error)
-        return  res.status(500).send("Error verifying OTP")
+        return res.status(500).send("Error verifying OTP");
     }
-}
+};
 
-module.exports = { generateOtp, verifyOtp }
+module.exports = { generateOtp, verifyOtp };
