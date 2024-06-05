@@ -46,7 +46,7 @@ console.log("otpmail:",email)
                 // res.status(200).send("OTP sent successfully");
             }
         });
-
+        return otp;
     } catch (error) {
         console.error("Error creating OTP:", error);
         // return res.status(500).send("Error sending OTP");
