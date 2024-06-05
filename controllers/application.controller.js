@@ -41,31 +41,67 @@ const getApplicationByRefId = async (req, res) => {
         return res.status(500).json({ message: error.message })
     }
 }
+// const createApplication = async (req, res) => {
+//     try {
+//         const { refId, email, fullName, ...applicationData } = req.body;
+//         console.log("req:", applicationData)
+//         const job = await Jobs.findOne({ refId: refId })
+//         if (!job) {
+//             return res.status(404).json({ message: 'Job does not exist' })
+//         }
+//         let user = await User.findOne({ email: email });
+//         const password = await Token(1)
+//         if (!user) {
+//             user = await User.create({ email, password, name: fullName, password: password })
+//             await sendMails({ email: email, subject: 'Account creation', text: 'Your account was created successfully', name: fullName })
+//             return res.status(201).json({ message: 'Your account was created successfully' })
+//         }
+//         await generateOtps({ email })
+//         const application = await Application.create({ applicationData, userData: user._id, job: job._id });
+//         if (!application) {
+//             return res.status(404).json({ message: 'Failed to submit application' })
+//         }
+//         user.applications = application || [];
+//         return res.status(201).json({ message: 'Application submitted successful', applications: application, _id: 0 })
+//     } catch (error) {
+//         return res.status(500).json({ message: error.message });
+//     }
+// }
 const createApplication = async (req, res) => {
     try {
         const { refId, email, fullName, ...applicationData } = req.body;
-        const job = await Jobs.findOne({ refId: refId })
+        console.log("req:", applicationData)
+        
+        const job = await Jobs.findOne({ refId: refId });
         if (!job) {
-            return res.status(404).json({ message: 'Job does not exist' })
+            return res.status(404).json({ message: 'Job does not exist' });
         }
+
         let user = await User.findOne({ email: email });
-        const password = await Token(1)
+        const password = await Token(1);
+
         if (!user) {
-            user = await User.create({ email, password, name: fullName, password: password })
-            await sendMails({ email: email, subject: 'Account creation', text: 'Your account was created successfully', name: fullName })
-            return res.status(201).json({ message: 'Your account was created successfully' })
+            user = await User.create({ email, password, name: fullName });
+            await sendMails({ email: email, subject: 'Account creation', text: 'Your account was created successfully', name: fullName });
+            return res.status(201).json({ message: 'Your account was created successfully' });
         }
-        await generateOtps({ email })
-        const application = await Application.create({ applicationData, userData: user._id, job: job._id });
+
+        await generateOtps({ email });
+        const application = await Application.create({ ...applicationData, userData: user._id, job: job._id });
+
         if (!application) {
-            return res.status(404).json({ message: 'Failed to submit application' })
+            return res.status(404).json({ message: 'Failed to submit application' });
         }
-        user.applications = application || [];
-        return res.status(201).json({ message: 'Application submitted successful', applications: application, _id: 0 })
+
+        user.applications = user.applications || [];
+        user.applications.push(application._id);
+        await user.save();
+
+        return res.status(201).json({ message: 'Application submitted successfully', applications: application });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
-}
+};
 
 const getTotalApplications = async (req, res) => {
     try {

@@ -17,7 +17,9 @@ const createUser = async (req, res) => {
         const hashPassword = await bcrypt.hash(password, 10);
         const refId = generateRefId()
         const otp =  await signUpOtp({email})
-        console.log("otp :", otp)
+        if(!otp){
+            return res.status(404).json({message: 'Falied to send OTP verification code to email'})
+        }
         const token = jwt.sign(
             { id: 1 },
             process.env.JWTSECRET,
@@ -33,16 +35,6 @@ const createUser = async (req, res) => {
             password: hashPassword,
             token: token
         })
-        // if (otp) {
-        //     newUser = await User.create({
-        //         refId,
-        //         isAdmin,
-        //         name,
-        //         email,
-        //         password: hashPassword,
-        //         token: token
-        //     })
-        // }
         console.log("user :", newUser)
         newUser.token = token;
         // await newUser.save();

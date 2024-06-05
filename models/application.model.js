@@ -5,12 +5,10 @@ const ApplicationSchema = new mongoose.Schema({
   userData: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true
   },
   job: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Jobs',
-    required: true
   },
   user: {
     firstName: { type: String },
