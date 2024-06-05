@@ -49,7 +49,7 @@ const createApplication = async (req, res) => {
         if (!job) {
             return res.status(404).json({ message: 'Job does not exist' })
         }
-        let user = await rr.findOne({ email: email });
+        let user = await User.findOne({ email: email });
         const password = await Token(1)
         if (!user) {
             user = await User.create({ email, password, name: fullName, password: password })
