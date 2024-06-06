@@ -1,4 +1,4 @@
-const OTP = require("./models/otp.model");
+const OTP = require("../models/otp.model");
 
 const verifyOtp = async ( { email, otp }) => {
     try {
@@ -9,4 +9,4 @@ const verifyOtp = async ( { email, otp }) => {
     }
 }
 
-module.exports = verifyOtp;
+module.exports = {verifyOtp};

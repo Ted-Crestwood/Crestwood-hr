@@ -4,6 +4,9 @@ const nodemailer = require('nodemailer');
 
 
 const generateOtps = async ({email}) => {
+    if(!email){
+        console.log('No email address was submitted')
+    }
     const otp = otpGenerator.generate(6, {
         digits: true,
         alphabets: false,
@@ -11,9 +14,12 @@ const generateOtps = async ({email}) => {
         specialChars: false
     })
     try {
-        await OTP.create({ email, otp  });
+        const otpExists = await OTP.findOne({email:email})
+        if(!otpExists){
+            await OTP.create({ email, otp  });
+        }
+        await OTP.updateOne({email:email}, {otp:otp})
         const transporter = nodemailer.createTransport({
-            // service: "SMTP",
             host: process.env.HOST,
             port: 465,
             secure: true,
@@ -28,11 +34,9 @@ const generateOtps = async ({email}) => {
             subject: "OTP Verification",
             text: `Your OTP for verification is: ${otp}`
         })
-        // res.status(200).send("OTP sent successfully")
         return otp;
     } catch (error) {
         console.error(error)
-        // res.status(500).send("Error sending OTP")
     }
 }
 module.exports = {generateOtps}
