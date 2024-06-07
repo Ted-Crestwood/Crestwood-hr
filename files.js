@@ -21,7 +21,7 @@ const createPresignedUrlWithoutClient = async ({ region, bucket, key }) => {
   const signedUrlObject = await presigner.presign(
     new HttpRequest({ ...url, method: "PUT" }),
   );
-  return formatUrl(signedUrlObject);
+  return formatUrl(signedUrlObject)
 };
 
 const createPresignedUrlWithClient = ({ region, bucket, key }) => {
