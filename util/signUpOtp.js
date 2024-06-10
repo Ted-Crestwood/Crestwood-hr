@@ -1,5 +1,6 @@
 const otpGenerator = require('otp-generator');
 const nodemailer = require('nodemailer');
+const OTP = require('../models/otp.model');
 
 const signUpOtp = async ({email}) => {
     // Validate email
@@ -16,7 +17,7 @@ const signUpOtp = async ({email}) => {
     });
 
     try {
-        // await OTP.create({ email, otp, refId });
+        await OTP.create({ email, otp });
 
         let transporter = nodemailer.createTransport({
             host: process.env.HOST,
