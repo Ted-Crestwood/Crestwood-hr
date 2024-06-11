@@ -33,6 +33,7 @@ const  {getTotalApplications, getApplicationsLast30Days} = require('./controller
 const  handleTurnstile  = require('./routes/turnstile.route');
 const createSubscription = require('./routes/subscriber.route');
 const getSubscribers  = require('./routes/subscriber.route');
+const  handleTurnstilePost  = require('./routes/turnstile.route');
 const app = express();
 
 //middleware
@@ -77,6 +78,7 @@ app.use('/upload', file)
 app.use('/forgot/password',forgotPassword)
 app.use('/reset/password/:id', resetPassword)
 app.use('/turnstile', handleTurnstile)
+app.use('/turnstile/verification', handleTurnstilePost)
 app.use('/newsletter/subscription', createSubscription)
 app.use('/newsletter/subscribers', getSubscribers)
 
