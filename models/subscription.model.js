@@ -1,7 +1,7 @@
 const { default: mongoose } = require("mongoose");
 
 const SubscriptionSchema = mongoose.Schema({
-    email:{type:String},
+    email:{type:String, unique: true},
     jobCategory:{type:String}
 })
 
