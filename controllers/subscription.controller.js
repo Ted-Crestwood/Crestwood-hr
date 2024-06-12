@@ -1,4 +1,5 @@
 const Subscription = require("../models/subscription.model");
+const sendSubscription  = require("../util/sendSubscription");
 
 const createSubscription = async (req, res) => {
     const subs = req.body;
@@ -6,6 +7,7 @@ const createSubscription = async (req, res) => {
         if (!subs) {
             res.status(404).json({ message: 'Failed to create subscription' })
         } else {
+            await sendSubscription(subs.email)
             await Subscription.create(subs)
             res.status(201).json({ message: 'Subscription created successfully' })
         }
