@@ -27,13 +27,12 @@ const createSubscription = async (req, res) => {
 }
 
 const getSubscribers = async (req, res) => {
-    const {email} = req.body;
+    const subscriber = await Subscription.find({},{_id:0})
     try {
-        if (!email) {
-            res.status(404).json({ message: 'User is not subscribed' })
+        if (!subscriber) {
+            res.status(404).json({ message: 'No subscribers yet' })
         } else {
-            const subscriber = await Subscription.find({ email: email },{_id:0})
-            res.status(201).json({ message: 'Subscriber found', subscriber: subscriber})
+            res.status(201).json({ message: 'Subscribers found', subscriber: subscriber})
         }
     } catch (error) {
         res.status(500).json({ message: error.message })
