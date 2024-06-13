@@ -81,7 +81,7 @@ app.use('/turnstile', handleTurnstile)
 app.use('/turnstile/verification', handleTurnstilePost)
 app.use('/newsletter/subscription', createSubscription)
 app.use('/newsletter/subscribers', getSubscribers)
-
+app.get('/',(req,res)=>{res.send('Welcome to crestwood hr db')})
 const PORT = process.env.PORT || 5002;
 const uri = process.env.MONGO_URI;
 app.listen(PORT, () => {
