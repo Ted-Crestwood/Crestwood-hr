@@ -82,7 +82,7 @@ app.use('/turnstile/verification', handleTurnstilePost)
 app.use('/newsletter/subscription', createSubscription)
 app.use('/newsletter/subscribers', getSubscribers)
 app.get('/',(req,res)=>{res.send('Welcome to crestwood hr db')})
-const PORT = process.env.PORT || 4003;
+const PORT = process.env.PORT || 4002;
 const uri = process.env.MONGO_URI;
 app.listen(PORT, () => {
     console.log("Server listening on port 4002")
