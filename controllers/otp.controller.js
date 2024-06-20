@@ -63,7 +63,7 @@ const generateOtp = async (req, res) => {
             });
             
         }
-        sendMail(email, "User verification", "", {otp:otp})
+        sendMail(email, "User verification", "userOtpVerification", {otp:otp})
     } catch (error) {
         console.error("Error creating OTP:", error);
         return res.status(500).send("Error sending OTP");
