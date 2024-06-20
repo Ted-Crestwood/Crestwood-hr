@@ -48,6 +48,9 @@ const signInUser = async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
+        if(!user){
+            return res.status(404).json({message: 'User account does not exist!'})
+        }
         let { name, refId, createdAt, verified } = user;
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!user && !isPasswordValid) {
