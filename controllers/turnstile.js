@@ -4,7 +4,7 @@ const SECRET = process.env.TURNSTILE_SECRET_KEY
 const crypto = require('crypto');
 
 const handleTurnstile = async (req, res) => {
-  const token = req.body['cf-turnstile-response'];
+  const {token} = req.body;
 
   const validationResult = await validateTurnstile(token);
 
@@ -16,7 +16,7 @@ const handleTurnstile = async (req, res) => {
 }
 
 const handleTurnstilePost = async (req, res) => {
-  const token = req.body['cf-turnstile-response']
+  const {token} = req.body;
   let formData = new FormData();
   formData.append('secret', SECRET)
   formData.append('response', token)
