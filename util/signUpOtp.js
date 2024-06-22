@@ -3,13 +3,14 @@ const nodemailer = require('nodemailer');
 const OTP = require('../models/otp.model');
 const hbs = require('nodemailer-express-handlebars')
 
-const signUpOtp = async ({ email }) => {
+const signUpOtp = async (req,res) => {
+    const { email } = req.body;
+    // console.log("email:", email)
     // Validate email
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         return res.status(400).send("Invalid email address");
     }
 
-    // const refId = generateRefId();
     const otp = otpGenerator.generate(6, {
         digits: true,
         alphabets: false,
@@ -29,16 +30,16 @@ const signUpOtp = async ({ email }) => {
                 pass: process.env.SMTP_PASSWORD
             }
         });
-        const hbsOptions = {
-            viewEngine: {
-                partialsDir: 'views',
-                layoutsDir: 'views',
-                defaultLayout: ''
+        const hbsOptions ={
+            viewEngine:{
+                partialsDir:'views',
+                layoutsDir:'views',
+                defaultLayout:''
             },
-            viewPath: 'views'
+            viewPath:'views'
         }
         transporter.use('compile', hbs(hbsOptions))
-        function sendMail(to, subject, template, context) {
+        function sendMail(to,subject,template,context){
             const mailOptions = {
                 from: "recruit@crestwood.co.ke",
                 to,
@@ -55,13 +56,13 @@ const signUpOtp = async ({ email }) => {
                     res.status(200).send("OTP sent successfully");
                 }
             });
-
+            
         }
-        sendMail(email, "User verification", "userOtpVerification", { otp: otp })
+        sendMail(email, "User verification", "userOtpVerification", {otp:otp})
         return otp;
     } catch (error) {
         console.error("Error creating OTP:", error);
-        // return res.status(500).send("Error sending OTP");
+        return res.status(500).send("Error sending OTP");
     }
 }
 

@@ -76,7 +76,7 @@ const verifyOtp = async (req, res) => {
         const otpRecord = await OTP.findOne({ email, otp });
         if (otpRecord) {
             await User.findOneAndUpdate({ email: email }, { verified: true })
-            return res.status(200).send("OTP verified successfully");
+            return res.status(200).send("Verification successfully");
         } else {
             return res.status(400).send("Invalid OTP");
         }

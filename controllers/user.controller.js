@@ -16,7 +16,7 @@ const createUser = async (req, res) => {
         }
         const hashPassword = await bcrypt.hash(password, 10);
         const refId = generateRefId()
-        const otp =  await signUpOtp({email})
+        const otp =  await signUpOtp(req,res)
         if(!otp){
             return res.status(404).json({message: 'Falied to send OTP verification code to email'})
         }
