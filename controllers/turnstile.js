@@ -47,7 +47,6 @@
 
 // module.exports = { handleTurnstile ,handleTurnstilePost}
 
-
 const { validateTurnstile } = require("../util/validateTurnstile");
 const axios = require('axios');
 const SECRET = process.env.TURNSTILE_SECRET_KEY;
