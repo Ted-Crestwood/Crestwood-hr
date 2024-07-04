@@ -55,24 +55,25 @@ const FormData = require('form-data');
 
 const handleTurnstile = async (req, res) => {
   const { token } = req.body;
-
-  if (!token) {
+console.log(token, "token")
+  if (!token && token === null) {
     return res.status(400).send('Token is required');
   }
 
   const validationResult = await validateTurnstile(token);
-
-  if (validationResult) {
-    return res.send('Validation successful!');
+  const validationStatus = validationResult.success;
+// console.log("validate", validationResult.success)
+  if (validationStatus) {
+    return res.status(201).json({message:'Validation successful!'});
   } else {
-    res.send('Validation failed!');
+    res.status(500).json({message:'Validation failed!'});
   }
 }
 
 const handleTurnstilePost = async (req, res) => {
   const { token } = req.body;
 
-  if (!token) {
+  if (!token && token === null) {
     return res.status(400).json({ message: 'Token is required' });
   }
 
