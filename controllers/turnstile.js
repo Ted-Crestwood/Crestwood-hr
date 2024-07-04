@@ -17,6 +17,9 @@ const handleTurnstile = async (req, res) => {
 
 const handleTurnstilePost = async (req, res) => {
   const {token} = req.body;
+  if (!token) {
+    return res.status(400).json({ message: 'Token is required' });
+  }
   let formData = new FormData();
   formData.append('secret', SECRET)
   formData.append('response', token)
