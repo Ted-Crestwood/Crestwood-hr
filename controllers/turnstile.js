@@ -62,7 +62,7 @@ console.log(token, "token")
 
   const validationResult = await validateTurnstile(token);
   const validationStatus = validationResult.success;
-// console.log("validate", validationResult.success)
+// console.log("validate", validationResult)
   if (validationStatus) {
     return res.status(201).json({message:'Validation successful!'});
   } else {
@@ -76,7 +76,6 @@ const handleTurnstilePost = async (req, res) => {
   if (!token && token === null) {
     return res.status(400).json({ message: 'Token is required' });
   }
-
   let formData = new FormData();
   formData.append('secret', SECRET);
   formData.append('response', token);
@@ -86,6 +85,7 @@ const handleTurnstilePost = async (req, res) => {
   
   try {
     const result = await axios.post(url, formData, { headers: formData.getHeaders() });
+    // console.log("result:", result)
     if (result.data.success) {
       res.status(201).json({ message: 'First verification successful' });
     } else {
