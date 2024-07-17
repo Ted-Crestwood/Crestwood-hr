@@ -21,6 +21,8 @@ const createJob = async (req, res) => {
             const job = await Jobs.create({title,location,salary,level,jobType,department,description,responsibilities,requirements,goToHave,organisation,deadline,createdOn,publishOn,extraInformation,
                 paymentFormat,contractType,slug, refId});
             if (job) {
+                user.jobs.push(job._id);
+                await user.save();
                 return res.status(201).json({ message: 'Job created' })
             } else {
                 return res.status(404).json({ message: 'Job not created' })

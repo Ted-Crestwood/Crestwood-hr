@@ -25,7 +25,8 @@ const UserSchema = mongoose.Schema({
     verified: { type: Boolean, default: false },
     refId: { type: String, unique: true },
     resetCode: { type: String, default: null },
-    applications: [{ type: Schema.Types.ObjectId, ref: 'Application' }]
+    applications: [{ type: Schema.Types.ObjectId, ref: 'Application' }],
+    jobs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Jobs' }]
     // organisation: { type: mongoose.Schema.Types.ObjectId, ref: 'Organisation' }
 },
     {

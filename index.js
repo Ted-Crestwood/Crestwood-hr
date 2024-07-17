@@ -31,7 +31,7 @@ const {resetPassword} = require('./controllers/password.controller');
 const getOpenJobs = require('./routes/jobRef.route')
 const  {getTotalApplications, getApplicationsLast30Days} = require('./controllers/application.controller');
 // const  handleTurnstile  = require('./routes/turnstile.route');
-const createSubscription = require('./routes/subscriber.route');
+const Subscription = require('./routes/subscriber.route');
 const getSubscribers  = require('./routes/subscriber.route');
 const  handleTurnstilePost  = require('./routes/turnstile.route');
 const app = express();
@@ -79,8 +79,8 @@ app.use('/forgot/password',forgotPassword)
 app.use('/reset/password/:id', resetPassword)
 // app.use('/turnstile', handleTurnstile)
 app.use('/turnstile/verification', handleTurnstilePost)
-app.use('/newsletter/subscription', createSubscription)
-app.use('/newsletter/subscribers', getSubscribers)
+app.use('/newsletter', Subscription)
+// app.use('/newsletter/subscribers', getSubscribers)
 app.get('/',(req,res)=>{res.send('Welcome to crestwood hr db')})
 const PORT = process.env.PORT || 4002;
 const uri = process.env.MONGO_URI;

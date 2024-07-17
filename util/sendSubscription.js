@@ -1,9 +1,8 @@
 const nodemailer = require('nodemailer');
 
-const sendSubscription = async (email) => {
+const sendSubscription = async (email, subject, text) => {
     try {
         const transporter = nodemailer.createTransport({
-            // service: "SMTP",
             host: process.env.HOST,
             port: 465,
             secure: true,
@@ -11,20 +10,22 @@ const sendSubscription = async (email) => {
                 user: process.env.EMAIL,
                 pass: process.env.SMTP_PASSWORD
             }
-        })
-        transporter.sendMail({
+        });
+
+        const mailOptions = {
             from: {
-                name: "Crestwood",
+                name: "Crestwood HR",
                 address: process.env.EMAIL,
             },
             to: email,
-            subject: 'Newsletter Subscription',
-            text: `Subscription successful`
-        })
-        // res.status(200).send("OTP sent successfully")
+            subject: subject,
+            text: text
+        };
+        const info = await transporter.sendMail(mailOptions);
+        return { status: "Success"+ info.response };
     } catch (error) {
-        console.error(error)
-        // res.status(500).send("Error sending OTP")
+        return { status:  error.message };
     }
 }
+
 module.exports = sendSubscription;
