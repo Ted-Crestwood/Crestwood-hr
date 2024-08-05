@@ -33,7 +33,7 @@ const generateSignedUrl = async (bucketName, objectKey) => {
         Bucket: bucketName,
         Key: objectKey,
         Expires: 300, // Expiration time in seconds (e.g., 5 minutes)
-        ContentType: 'image/jpg', // Set the appropriate content type for your file
+        // ContentType: 'image/jpg', // Set the appropriate content type for your file
         ACL: 'bucket-owner-full-control' // Set the desired access control list
     };
 
@@ -65,4 +65,4 @@ const signedUrlFunction = async (req, res) => {
         })
     }
 }
-module.exports = signedUrlFunction;
+module.exports = {signedUrlFunction,generateSignedUrl};
