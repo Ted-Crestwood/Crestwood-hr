@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors')
 const applicationRoute = require('./routes/application.route');
-const userRoute = require('./routes/user.route')
+const userRouter = require('./routes/user.route')
 const signInRoute = require('./routes/userSignIn')
 const getApplicationsById = require('./routes/application.route')
 const dotenv = require('dotenv');
@@ -44,11 +44,8 @@ app.use(cookieParser())
 
 //routes
 
-app.use('/users', userRoute);
-app.use('/signin', signInRoute);
-app.use('/signup', userRoute)
-app.use('/users/:id', userRoute)
-app.use('/applications', applicationRoute )
+app.use('/users', userRouter);
+app.use('/applications/all', applicationRoute )
 app.use('/applications/:id', getApplicationsById)
 app.use('/applications', getTotalApplications)
 app.use('/applications/thirtydays' , getApplicationsLast30Days)
@@ -67,7 +64,7 @@ app.use('/open', getOpenJobs)
 app.use('/jobs/:refId', getJobByRefId)
 app.use('/jobs/delete/:id', deleteJob)
 app.use('/jobs/update/:id', updateJob)
-app.use('/otp', generateOtp)
+// app.use('/otp', generateOtp)
 app.use('/otp/verification', verification)
 app.use('/create/shortlist', createShortlst)
 app.use('/get/shortlist', getShortlist)

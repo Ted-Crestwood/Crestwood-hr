@@ -16,9 +16,9 @@ const createUser = async (req, res) => {
         }
         const hashPassword = await bcrypt.hash(password, 10);
         const refId = generateRefId()
-        const otp =  await signUpOtp(req,res)
-        if(!otp){
-            return res.status(404).json({message: 'Falied to send OTP verification code to email'})
+        const otp = await signUpOtp(req, res)
+        if (!otp) {
+            return res.status(404).json({ message: 'Falied to send OTP verification code to email' })
         }
         const token = jwt.sign(
             { id: 1 },
@@ -36,11 +36,13 @@ const createUser = async (req, res) => {
             token: token
         })
         newUser.token = token;
-        return res.status(201).json({ message: "User created successfully", user: { email, name,refId, createdAt, verified, }, token: token })
+        const { createdAt, verified } = newUser;
+        return res.status(201).json({ message: "User created successfully", user: { email, name, refId, createdAt, verified, }, token: token })
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
 }
+
 function generateRefId() {
     return 'CRT' + Date.now().toString(36) + Math.random().toString(36).substring(2, 5);
 }
@@ -48,14 +50,14 @@ const signInUser = async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
-        if(!user){
-            return res.status(404).json({message: 'User account does not exist!'})
+        if (!user) {
+            return res.status(404).json({ message: 'User account does not exist!' })
         }
-        let {  refId, createdAt, verified } = user;
+        let { refId, createdAt, verified } = user;
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!user && !isPasswordValid) {
             return res.status(401).json({ message: "Invalid email or password" });
-        } 
+        }
         const token = jwt.sign(
             { id: user._id },
             process.env.JWTSECRET,
@@ -71,7 +73,7 @@ const signInUser = async (req, res) => {
             expires: new Date(Date.now() + 3 * 24 * 60 * 1000),
             httpOnly: true
         }
-        return res.status(201).cookie("token", token, options).json({ message: "Sign in successfully", token: token, data: {  refId, createdAt, verified, email } });
+        return res.status(201).cookie("token", token, options).json({ message: "Sign in successfully", token: token, data: { refId, createdAt, verified, email } });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
@@ -85,21 +87,19 @@ const getUser = async (req, res) => {
         return res.status(500).json({ message: error.message })
     }
 }
-const getUserById = async (req, res) => {
+
+const getUserByRefId = async (req, res) => {
+    const searchRef = req.params.refId;
     try {
-        const { id } = req.params;
-        const user = await User.findById(id);
-
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
+        const user = await User.findOne({ refId: searchRef })
+        if (user) {
+            return res.status(200).json({ message: user })
         }
-
-        return res.status(200).json(user);
+        return res.status(400).json({ message: "User not found!" })
     } catch (error) {
-        return res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message })
     }
-};
+}
 
 
-
-module.exports = { createUser, getUser, signInUser, getUserById };
+module.exports = { createUser, getUser, signInUser, getUserByRefId };

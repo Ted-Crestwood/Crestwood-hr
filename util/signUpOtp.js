@@ -3,23 +3,24 @@ const nodemailer = require('nodemailer');
 const OTP = require('../models/otp.model');
 const hbs = require('nodemailer-express-handlebars')
 
-const signUpOtp = async (req,res) => {
+const signUpOtp = async (req, res) => {
     const { email } = req.body;
-    // console.log("email:", email)
-    // Validate email
+
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         return res.status(400).send("Invalid email address");
     }
 
-    const otp = otpGenerator.generate(6, {
-        digits: true,
-        alphabets: false,
-        upperCase: false,
-        specialChars: false
-    });
 
     try {
-        await OTP.create({ email, otp });
+        await OTP.deleteMany({ email });
+
+        const otp = otpGenerator.generate(6, {
+            digits: true,
+            alphabets: false,
+            upperCase: false,
+            specialChars: false
+        });
+        await OTP.create({ email, otp, expiresAt: Date.now() + 10 * 60 * 1000 });
 
         let transporter = nodemailer.createTransport({
             host: process.env.HOST,
@@ -30,16 +31,16 @@ const signUpOtp = async (req,res) => {
                 pass: process.env.SMTP_PASSWORD
             }
         });
-        const hbsOptions ={
-            viewEngine:{
-                partialsDir:'views',
-                layoutsDir:'views',
-                defaultLayout:''
+        const hbsOptions = {
+            viewEngine: {
+                partialsDir: 'views',
+                layoutsDir: 'views',
+                defaultLayout: ''
             },
-            viewPath:'views'
+            viewPath: 'views'
         }
         transporter.use('compile', hbs(hbsOptions))
-        function sendMail(to,subject,template,context){
+        function sendMail(to, subject, template, context) {
             const mailOptions = {
                 from: "recruit@crestwood.co.ke",
                 to,
@@ -53,12 +54,12 @@ const signUpOtp = async (req,res) => {
                     return res.status(500).send("Error sending OTP");
                 } else {
                     console.log("Email sent:", info.response);
-                    res.status(200).send("OTP sent successfully");
+                    return res.status(200).send("OTP sent successfully");
                 }
             });
-            
+
         }
-        sendMail(email, "User verification", "userOtpVerification", {otp:otp})
+        sendMail(email, "User verification", "userOtpVerification", { otp: otp })
         return otp;
     } catch (error) {
         console.error("Error creating OTP:", error);

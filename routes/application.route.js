@@ -8,7 +8,7 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB file size limit
 });
 
-router.get('/',getApplications)
+router.get('/all',getApplications)
 router.get('/:id', getApplicationsById)
 router.post('/',  createApplication);
 router.get('/total', getTotalApplications)
