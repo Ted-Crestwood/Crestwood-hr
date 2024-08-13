@@ -45,6 +45,8 @@ app.use(cookieParser())
 //routes
 
 app.use('/users', userRouter);
+app.use('/forgot/password',forgotPassword)
+app.use('/reset/password/:refId', resetPassword)
 app.use('/applications/all', applicationRoute )
 app.use('/applications/:id', getApplicationsById)
 app.use('/applications', getTotalApplications)
@@ -73,8 +75,7 @@ app.use('/get/shortlist/update/:id', updateShortlist)
 app.use('/get/shortlist/delete/:id', deleteShortlist)
 app.use('/upload', file) 
 app.use('/file',file)
-app.use('/forgot/password',forgotPassword)
-app.use('/reset/password/:id', resetPassword)
+
 // app.use('/turnstile', handleTurnstile)
 app.use('/turnstile/verification', handleTurnstilePost)
 app.use('/newsletter', Subscription)

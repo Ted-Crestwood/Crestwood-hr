@@ -10,20 +10,41 @@ const forgotPassword = async (req, res) => {
         if (!oldUser) {
             return res.status(404).json({ message: 'User does not exist' })
         }
-        const oldResetCode = oldUser.resetCode;
-        if (oldResetCode === 'null') {
-            const newCode = otpGenerator.generate(6, {
+        let resetCode;
+        if (!oldUser.resetCode) {
+            resetCode = otpGenerator.generate(6, {
                 digits: true,
                 alphabets: false,
                 upperCase: false,
                 specialChars: false
             })
-            const codeUpdate = await User.findOneAndUpdate({ email: oldUser.email }, { resetCode: newCode }, { new: true, useFindAndModify: false });
-            await sendMails({ email: email, subject: 'Password reset', text: `This is your verification code ${codeUpdate.resetCode}`, name: 'Crestwood' })
-            return res.status(200).json({ message: 'User reset code created and mail sent' })
+            await User.findOneAndUpdate(
+                { email: oldUser.email },
+                { resetCode },
+                { new: true, useFindAndModify: false }
+            );
+        } else {
+            resetCode = oldUser.resetCode
         }
-        await sendMails({ email: email, subject: 'Password reset', text: `This is your verification code ${oldResetCode}`, name: 'Crestwood' })
-        return res.status(201).json({ message: 'Link sent successfully' })
+        await sendMails({ email: email, subject: 'Password reset', text: `This is your verification code ${resetCode}`, name: 'Crestwood' })
+        return res.status(201).json({ message: 'Reset code sent successfully to email' })
+    } catch (error) {
+        return res.status(500).json({ message: error.message })
+    }
+}
+
+const passwordCodeVerificaton = async (req, res) => {
+    const { email, code } = req.body;
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ message: "User not found" })
+        }
+        const finalCode = user.resetCode;
+        if (finalCode !== code) {
+            return res.status(400).json({ message: "Invalid reset code" })
+        }
+        return res.status(200).json({ message: 'Reset code verified successfully' });
     } catch (error) {
         return res.status(500).json({ message: error.message })
     }
@@ -34,24 +55,40 @@ const verifyPassword = async (newPassword, oldPassword) => {
     return match
 }
 const resetPassword = async (req, res) => {
+    const { password: newPassword } = req.body;
     try {
-        const { id } = req.params;
-        const { newPassword, code } = req.body;
-        const user = await User.findById({ _id: id });
-        const oldCode = await user.resetCode;
-        if (oldCode !== code) {
-            return res.status(404).json({ message: 'User verification failed' })
+        const { refId } = req.params;
+        const user = await User.findOne({ refId: refId });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
         }
-        const encryptedPassword = await bcrypt.hash(newPassword, 10);
-        const pass = await verifyPassword(encryptedPassword, user.password)
-        if (pass) {
-            return res.status(404).json({ message: 'Password already exists' })
-        }
-        user.password = encryptedPassword;
-        return res.status(201).json({ message: 'New password created successfully' })
-    } catch (error) {
 
+        const isSamePassword = await bcrypt.compare(newPassword, user.password);
+        if (isSamePassword) {
+            return res.status(400).json({ message: "New password cannot be the same as the old password" });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashedPassword;
+        await user.save();
+
+        return res.status(200).json({ message: "Password reset successful" });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
     }
 }
 
-module.exports = { forgotPassword, resetPassword };
+module.exports = { forgotPassword, resetPassword, passwordCodeVerificaton };
+// const { newPassword, code } = req.body;
+// const user = await User.findById({ _id: id });
+// const oldCode = await user.resetCode;
+// if (oldCode !== code) {
+//     return res.status(404).json({ message: 'User verification failed' })
+// }
+// const encryptedPassword = await bcrypt.hash(newPassword, 10);
+// const pass = await verifyPassword(encryptedPassword, user.password)
+// if (pass) {
+//     return res.status(404).json({ message: 'Password already exists' })
+// }
+// user.password = encryptedPassword;
+// return res.status(201).json({ message: 'New password created successfully' })
